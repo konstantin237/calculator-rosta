@@ -1,0 +1,243 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Калькулятор роста</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#101522;color:#f3f5fb}.wrap{max-width:1200px;margin:auto;padding:28px 18px 60px}header,.card{background:#192238;border:1px solid #34405d;border-radius:20px}header{padding:24px;margin-bottom:18px}h1{margin:0 0 8px;font-size:34px}.lead{color:#b9c3d8;line-height:1.5}.layout{display:grid;grid-template-columns:320px 1fr;gap:18px}.card{padding:20px}label{display:block;color:#b9c3d8;margin:14px 0 7px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #4a5775;background:#0d1320;color:white;font-size:20px}button{width:100%;padding:13px;margin-top:18px;border:0;border-radius:10px;background:#e9edf7;color:#101522;font-weight:bold;font-size:16px;cursor:pointer}.formula{margin-top:18px;padding:14px;background:#0d1320;border-radius:10px;line-height:1.65;font-family:monospace}.stageHeader{
+position:relative;height:62px;margin-bottom:8px;color:#e7ebf5;
+display:grid;grid-template-columns:2fr 2fr 2fr;text-align:center;
+font-weight:800;font-size:15px;align-items:start;
+}
+.stageHeader .parentNames{
+font-size:12px;color:#aeb9d0;font-weight:400;margin-top:5px;
+display:flex;justify-content:center;gap:95px;
+}
+.stage{height:660px;position:relative;overflow:visible;border-radius:14px;background:linear-gradient(#1c2945,#0d1423)}.ruler{position:absolute;left:8px;z-index:3;top:20px;height:535px;width:55px;border-right:2px solid #71809f}.tick{position:absolute;right:6px;height:14px;line-height:14px;color:#aeb9d0;font-size:11px}.divider{position:absolute;top:20px;bottom:20px;width:2px;background:#71809f;opacity:.75;z-index:1}.divider.left{left:37.5%}.divider.right{left:67%}.stageHeaders{position:absolute;top:18px;left:65px;right:12px;display:grid;grid-template-columns:2fr 2fr 2fr;text-align:center;font-weight:800;font-size:15px;color:#e7ebf5}.parentHeader{position:absolute;top:43px;left:65px;right:12px;display:flex;justify-content:center;gap:95px;font-size:12px;color:#aeb9d0}
+.people{position:absolute;left:65px;right:12px;top:20px;height:535px;
+display:flex;align-items:flex-end;justify-content:space-around;gap:4px}.person{height:100%;flex:1;min-width:70px;position:relative;
+display:block;text-align:center}
+.personGuide{position:absolute;height:2px;background:#e7ebf5;opacity:.95;
+left:calc(50% - 16px);width:32px;z-index:5;pointer-events:none}.personHead{
+position:absolute;
+width:45px;
+height:100px;
+border-radius:50% 50% 43% 43% / 43% 43% 57% 57%;
+left:50%;
+transform:translateX(-50%);
+background:#f1c7a5;
+border:3px solid #8095c9;
+z-index:3
+}.personBody{position:absolute;width:58px;left:50%;transform:translateX(-50%);border-radius:30px 30px 8px 8px;background:#8095c9;z-index:2}.dad .personBody{background:#5973aa}.mom .personBody{background:#d29b62}.son .personBody{width:50px;background:#58a39d}.daughter .personBody{width:50px;background:linear-gradient(90deg,#f7dce9,#fff7fb)}.person b{position:absolute;left:50%;transform:translate(-50%, -100%);
+font-size:13px;white-space:nowrap;z-index:4}.person small{display:none}.results{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.result{background:#0d1320;border:1px solid #34405d;border-radius:14px;padding:17px}.result h2{margin:0 0 8px;font-size:19px}.num{font-size:29px;font-weight:900}.muted{color:#aeb9d0;font-size:13px}.note{margin-top:14px;padding:15px;border-radius:12px;background:#202b44;line-height:1.5}.advice{margin-top:14px;padding:15px;border-radius:12px;border:1px solid #52688f;background:#151e31;line-height:1.5}
+.advice h3{margin:0 0 12px;font-size:17px}.comparison{display:grid;gap:10px}.comparisonRow{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#0d1320;border:1px solid #34405d;border-radius:10px;overflow:hidden}.comparisonCell{padding:12px;border-bottom:1px solid #34405d}.comparisonCell:first-child{border-right:1px solid #34405d}.comparisonLabel{color:#aeb9d0;font-size:12px;margin-bottom:4px}.comparisonValue{font-size:18px;font-weight:800}.comparisonResult{grid-column:1/-1;padding:12px;font-weight:700;line-height:1.45;background:#151e31}@media(max-width:600px){.comparisonRow{grid-template-columns:1fr}}
+.disclaimer{color:#9eabc4;font-size:12px;line-height:1.5;margin-top:16px}@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{height:540px}.person{min-width:45px}.person b{font-size:10px}.body{width:45px}.son .body,.daughter .body{width:39px}}
+</style></head><body><div class="wrap"><header><h1>Калькулятор роста</h1><div class="lead">Введите рост папы и мамы. Сайт показывает диапазон по заданной модели: два варианта сына и два варианта дочери — прямо на ростомере.</div></header><div class="layout"><section class="card"><h2>Родители</h2><label>Рост папы, см</label><input id="dad" type="number" min="70" max="250" value="185"><label>Рост мамы, см</label><input id="mom" type="number" min="70" max="250" value="145"><button onclick="calculate()">Рассчитать</button><div class="formula"><b>Сын</b><br>максимум = рост мамы + 1 голова<br>минимум = рост сына-максимума − 1 голова<br><br><b>Дочь</b><br>если разница в росте родителей не больше 2 голов:<br>максимум = рост папы<br>минимум = рост дочери-максимума − 1 голова<br><br>если отец выше матери примерно на две головы или больше:<br>максимум дочери = максимум сына − 1 голова<br>минимум дочери = максимум дочери − 1 голова</div><div class="note" style="margin-top:12px;background:#2a2030">
+<b>Почему это важно:</b> здесь специально используется более осторожный сценарий: сначала смотрим на рост-максимум ребёнка и сравниваем его со средним ростом людей его пола. Если даже максимум заметно ниже среднего, это повод обратиться к детскому эндокринологу и обсудить, есть ли медицинские показания к лечению, в том числе гормоном роста.
+</div>
+<div class="disclaimer">Это визуальный калькулятор по заданной модели, а не медицинский способ прогнозирования взрослого роста. Порог ниже среднего используется здесь как логика сайта, а не как медицинский критерий назначения гормона роста. Решение о лечении принимает врач после оценки медицинских показаний.</div></section><section class="card"><div class="stageHeader">
+<div>Сын</div>
+<div>Родители<div class="parentNames"><span>Папа</span><span>Мама</span></div></div>
+<div>Дочь</div>
+</div><div class="stage"><div class="ruler" id="ruler"></div><div class="divider left"></div><div class="divider right"></div><div class="people" id="people"></div></div><div class="results"><div class="result"><h2>👦 Сын</h2><div class="muted">минимум</div><div class="num" id="sonMin">—</div><div class="muted">максимум</div><div class="num" id="sonMax">—</div></div><div class="result"><h2>👧 Дочь</h2><div class="muted">минимум</div><div class="num" id="daughterMin">—</div><div class="muted">максимум</div><div class="num" id="daughterMax">—</div></div></div><div id="advice" class="advice"></div><div class="note">
+<b>Идея:</b> смотреть и рассчитывать именно на рост-максимум — это когнитивное искажение: мы автоматически рассчитываем на наиболее благоприятный сценарий. Для жизненных решений осторожнее сначала посмотреть, насколько низким может оказаться рост ребёнка.<br><br>
+<b>Вывод:</b> если даже рост-максимум ребёнка ниже среднего роста его пола, сайт рекомендует обратиться к детскому эндокринологу и обсудить возможность лечения, в том числе гормоном роста. Если максимум примерно совпадает со средним или отличается от него всего на несколько сантиметров, отдельный совет из-за одного только этого расчёта не выдаётся.<br><br>
+Для ориентира сайт использует средний рост мужчин <b>177 см</b> и женщин <b>166 см</b>. Врач сам решает, есть ли медицинские показания к гормону роста, после обследования.
+</div></section></div></div><script>
+function calculate(){
+    const dad=+document.getElementById('dad').value;
+    const mom=+document.getElementById('mom').value;
+    if(!dad||!mom)return;
+
+    // В исходной модели "голова" для расчёта роста сына = 24 см.
+    // Для перехода от максимума сына к максимуму дочери используется 19 см.
+    const head=24;
+    const daughterHead=19;
+
+    let sonMax, sonMin, daughterMax, daughterMin;
+
+    // Сын: максимум на одну голову выше матери.
+    sonMax=mom+head;
+    sonMin=sonMax-head;
+
+    // Максимальный рост дочери всегда ниже максимального роста сына
+    // и не может быть больше минимального роста сына.
+    // Минимальный рост дочери всегда ниже её максимального роста.
+    daughterMax=Math.min(sonMax-daughterHead, sonMin);
+    daughterMin=daughterMax-daughterHead;
+
+    const sonAverage=177;
+    const daughterAverage=166;
+    const tolerance=3;
+
+    document.getElementById('sonMin').textContent=Math.round(sonMin)+' см';
+    document.getElementById('sonMax').textContent=Math.round(sonMax)+' см';
+    document.getElementById('daughterMin').textContent=Math.round(daughterMin)+' см';
+    document.getElementById('daughterMax').textContent=Math.round(daughterMax)+' см';
+
+    const people=[
+        ['Дочь — минимум',daughterMin,'daughter'],
+        ['Дочь — максимум',daughterMax,'daughter'],
+        ['Папа',dad,'dad'],
+        ['Мама',mom,'mom'],
+        ['Сын — минимум',sonMin,'son'],
+        ['Сын — максимум',sonMax,'son']
+    ];
+
+    const all=people.map(x=>x[1]);
+
+    // ================================================================
+    // РОСТОМЕР: КООРДИНАТЫ ЦИФР = ОСНОВА ДЛЯ ВСЕХ ФИГУР
+    // ================================================================
+    const lo=Math.floor((Math.min(...all)-10)/5)*5;
+    const hi=Math.ceil((Math.max(...all)+10)/5)*5;
+    const H=535;
+
+    /*
+       Сначала физически создаём цифры ростомера.
+
+       Для КАЖДОЙ цифры запоминаем:
+         x  = её горизонтальная координата
+         y  = НИЖНЮЮ координату цифры
+
+       Именно эти координаты потом используются для фигур.
+       Отдельной шкалы для фигур НЕТ.
+    */
+    const rulerCoords={};
+    let ticks='';
+
+    for(let h=lo;h<=hi;h+=5){
+        const bottomY=H-(h-lo)*(H/(hi-lo));
+        const topY=bottomY-14;
+
+        // Пока только создаём цифры.
+        // Реальные x/y будут считаны НИЖЕ, после вставки в DOM.
+        ticks+=`<div class="tick" data-height="${h}" style="top:${topY}px">${h}</div>`;
+    }
+
+    const ruler=document.getElementById('ruler');
+    ruler.innerHTML=ticks;
+
+    /*
+       Теперь цифры уже реально существуют на странице.
+       Запоминаем ИХ ФАКТИЧЕСКИЕ координаты:
+         x = offsetLeft
+         y = offsetTop + offsetHeight = нижний край цифры
+
+       Это именно та координата, которую потом используем
+       для постановки линии роста.
+    */
+    ruler.querySelectorAll('.tick').forEach(el=>{
+        const h=Number(el.dataset.height);
+
+        rulerCoords[h]={
+            x:el.offsetLeft,
+            y:el.offsetTop+el.offsetHeight
+        };
+    });
+
+    /*
+       ГЛАВНАЯ ЛОГИКА.
+
+       Если рост ровно кратен 5:
+          170 -> берём НИЖНИЙ Y цифры 170.
+
+       Если рост НЕ кратен 5:
+          171, 172, 173, 174
+          находятся в промежутке 170..175.
+
+       Для ВСЕХ этих значений берём:
+          (нижний Y цифры 170 + нижний Y цифры 175) / 2
+
+       То есть они получают ОДИНАКОВУЮ горизонтальную линию,
+       строго посередине между двумя ближайшими цифрами ростомера.
+
+       Это специально НЕ является пропорциональной интерполяцией.
+    */
+    function growthLineY(height){
+        const roundedHeight=Math.round(height);
+
+        // Точное значение, кратное 5:
+        if(roundedHeight % 5 === 0 && rulerCoords[roundedHeight]){
+            return rulerCoords[roundedHeight].y;
+        }
+
+        // Нижняя и верхняя отметки, кратные 5.
+        const lower=Math.floor(height/5)*5;
+        const upper=lower+5;
+
+        const lowerPoint=rulerCoords[lower];
+        const upperPoint=rulerCoords[upper];
+
+        if(lowerPoint && upperPoint){
+            // СТРОГО СЕРЕДИНА между нижними Y двух цифр.
+            return (lowerPoint.y + upperPoint.y) / 2;
+        }
+
+        // Запасной вариант только если значение вышло за созданный ростомер.
+        return H-(height-lo)*(H/(hi-lo));
+    }
+
+    /*
+       Фигура:
+
+       ───────────────  <- горизонтальная линия роста
+              ○         <- ВЕРХ круга совпадает с линией
+             /|\
+             / \
+
+       Линия касается круга именно сверху.
+       Тело начинается ниже головы.
+    */
+    // Голова должна занимать примерно 19 см по высоте.
+    // Больший диаметр овала расположен вертикально.
+    // Меньший диаметр = 45% от большего.
+    //
+    // Высота ростомера H соответствует диапазону hi-lo сантиметров,
+    // поэтому 19 см переводим в реальные пиксели этого ростомера.
+    const headHeightCm=19;
+    const headHeight=19*(H/(hi-lo));
+    const headWidth=headHeight*0.45;
+    const headBorder=3;
+    const headTotal=headHeight+headBorder*2;
+    const bodyGap=6;
+
+    document.getElementById('people').innerHTML=people.map(p=>{
+        const growthY=growthLineY(p[1]);
+
+        // ВЕРХ головы = линия роста.
+        const headTop=growthY;
+
+        // Тело начинается под кругом.
+        const bodyTop=headTop+headTotal+bodyGap;
+        const bodyHeight=Math.max(20,H-bodyTop);
+
+        // Горизонтальная линия роста для каждой фигуры.
+        const guide=
+            `<div class="personGuide"
+                  style="top:${growthY}px;
+                         left:calc(50% - 32px);
+                         width:64px"></div>`;
+
+        return `<div class="person ${p[2]}">
+            ${guide}
+            <div class="personHead" style="top:${headTop}px;width:${headWidth}px;height:${headHeight}px"></div>
+            <div class="personBody" style="top:${bodyTop}px;height:${bodyHeight}px"></div>
+            <b style="top:${headTop-8}px">${p[0]}</b>
+        </div>`;
+    }).join('');
+
+    const sonNeedsDoctor=sonMax < sonAverage-tolerance;
+    const daughterNeedsDoctor=daughterMax < daughterAverage-tolerance;
+
+    const sonDifference=sonAverage-Math.round(sonMax);
+    const daughterDifference=daughterAverage-Math.round(daughterMax);
+
+    const sonAdvice=sonNeedsDoctor
+        ? `<div class="comparisonRow"><div class="comparisonCell"><div class="comparisonLabel">Максимальный рост сына</div><div class="comparisonValue">${Math.round(sonMax)} см</div></div><div class="comparisonCell"><div class="comparisonLabel">Средний рост мужчин</div><div class="comparisonValue">${sonAverage} см</div></div><div class="comparisonResult">Рост-максимум ниже среднего на ${sonDifference} см.<br>Сайт рекомендует посетить детского эндокринолога и обсудить возможность лечения, в том числе гормона роста.</div></div>`
+        : `<div class="comparisonRow"><div class="comparisonCell"><div class="comparisonLabel">Максимальный рост сына</div><div class="comparisonValue">${Math.round(sonMax)} см</div></div><div class="comparisonCell"><div class="comparisonLabel">Средний рост мужчин</div><div class="comparisonValue">${sonAverage} см</div></div><div class="comparisonResult">Разница — ${Math.abs(sonDifference)} см. По одной этой модели отдельный совет обращаться к врачу не выдаётся.</div></div>`;
+
+    const daughterAdvice=daughterNeedsDoctor
+        ? `<div class="comparisonRow"><div class="comparisonCell"><div class="comparisonLabel">Максимальный рост дочери</div><div class="comparisonValue">${Math.round(daughterMax)} см</div></div><div class="comparisonCell"><div class="comparisonLabel">Средний рост женщин</div><div class="comparisonValue">${daughterAverage} см</div></div><div class="comparisonResult">Рост-максимум ниже среднего на ${daughterDifference} см.<br>Сайт рекомендует посетить детского эндокринолога и обсудить возможность лечения, в том числе гормона роста.</div></div>`
+        : `<div class="comparisonRow"><div class="comparisonCell"><div class="comparisonLabel">Максимальный рост дочери</div><div class="comparisonValue">${Math.round(daughterMax)} см</div></div><div class="comparisonCell"><div class="comparisonLabel">Средний рост женщин</div><div class="comparisonValue">${daughterAverage} см</div></div><div class="comparisonResult">Разница — ${Math.abs(daughterDifference)} см. По одной этой модели отдельный совет обращаться к врачу не выдаётся.</div></div>`;
+
+    document.getElementById('advice').innerHTML=
+        `<h3>Что показывает этот расчёт</h3><div class="comparison">${sonAdvice}${daughterAdvice}</div>`;
+}
+calculate();
+</script></body></html>
