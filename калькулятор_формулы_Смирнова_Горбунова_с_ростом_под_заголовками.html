@@ -24,7 +24,8 @@ background:#f1c7a5;
 border:3px solid #8095c9;
 z-index:3
 }.personBody{position:absolute;width:58px;left:50%;transform:translateX(-50%);border-radius:30px 30px 8px 8px;background:#8095c9;z-index:2}.dad .personBody{background:#5973aa}.mom .personBody{background:#d29b62}.son .personBody{width:50px;background:#58a39d}.daughter .personBody{width:50px;background:linear-gradient(90deg,#f7dce9,#fff7fb)}.person b{position:absolute;left:50%;transform:translate(-50%, -100%);
-font-size:13px;white-space:nowrap;z-index:4}.person small{display:none}.results{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.result{background:#0d1320;border:1px solid #34405d;border-radius:14px;padding:17px}.result h2{margin:0 0 8px;font-size:19px}.num{font-size:29px;font-weight:900}.muted{color:#aeb9d0;font-size:13px}.note{margin-top:14px;padding:15px;border-radius:12px;background:#202b44;line-height:1.5}.advice{margin-top:14px;padding:15px;border-radius:12px;border:1px solid #52688f;background:#151e31;line-height:1.5}
+font-size:13px;white-space:nowrap;z-index:4;text-align:center;line-height:1.25}
+.person b .heightValue{display:block;font-size:12px;font-weight:400;color:#aeb9d0;margin-top:2px}.person small{display:none}.results{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.result{background:#0d1320;border:1px solid #34405d;border-radius:14px;padding:17px}.result h2{margin:0 0 8px;font-size:19px}.num{font-size:29px;font-weight:900}.muted{color:#aeb9d0;font-size:13px}.note{margin-top:14px;padding:15px;border-radius:12px;background:#202b44;line-height:1.5}.advice{margin-top:14px;padding:15px;border-radius:12px;border:1px solid #52688f;background:#151e31;line-height:1.5}
 .advice h3{margin:0 0 12px;font-size:17px}.comparison{display:grid;gap:10px}.comparisonRow{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#0d1320;border:1px solid #34405d;border-radius:10px;overflow:hidden}.comparisonCell{padding:12px;border-bottom:1px solid #34405d}.comparisonCell:first-child{border-right:1px solid #34405d}.comparisonLabel{color:#aeb9d0;font-size:12px;margin-bottom:4px}.comparisonValue{font-size:18px;font-weight:800}.comparisonResult{grid-column:1/-1;padding:12px;font-weight:700;line-height:1.45;background:#151e31}@media(max-width:600px){.comparisonRow{grid-template-columns:1fr}}
 .disclaimer{color:#9eabc4;font-size:12px;line-height:1.5;margin-top:16px}@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{height:540px}.person{min-width:45px}.person b{font-size:10px}.body{width:45px}.son .body,.daughter .body{width:39px}}
 </style></head><body><div class="wrap"><header><h1>Калькулятор роста</h1><div class="lead">Введите рост папы и мамы. Сайт показывает диапазон по заданной модели: два варианта сына и два варианта дочери — прямо на ростомере.</div></header><div class="layout"><section class="card"><h2>Родители</h2><label>Рост папы, см</label><input id="dad" type="number" min="70" max="250" value="185"><label>Рост мамы, см</label><input id="mom" type="number" min="70" max="250" value="145"><button onclick="calculate()">Рассчитать</button><div class="formula"><b>Формула Смирнова и Горбунова</b><br><br><b>Сын</b><br>максимум = (рост отца + рост матери + 12,5) : 2 + 8<br>минимум = (рост отца + рост матери + 12,5) : 2 − 8<br><br><b>Дочь</b><br>максимум = (рост отца + рост матери − 12,5) : 2 + 8<br>минимум = (рост отца + рост матери − 12,5) : 2 − 8</div><div class="note" style="margin-top:12px;background:#2a2030">
@@ -65,12 +66,12 @@ function calculate(){
     document.getElementById('daughterMax').textContent=Math.round(daughterMax)+' см';
 
     const people=[
-        ['Дочь — минимум',daughterMin,'daughter'],
         ['Дочь — максимум',daughterMax,'daughter'],
+        ['Дочь — минимум',daughterMin,'daughter'],
         ['Папа',dad,'dad'],
         ['Мама',mom,'mom'],
-        ['Сын — минимум',sonMin,'son'],
-        ['Сын — максимум',sonMax,'son']
+        ['Сын — максимум',sonMax,'son'],
+        ['Сын — минимум',sonMin,'son']
     ];
 
     const all=people.map(x=>x[1]);
@@ -212,7 +213,7 @@ function calculate(){
             ${guide}
             <div class="personHead" style="top:${headTop}px;width:${headWidth}px;height:${headHeight}px"></div>
             <div class="personBody" style="top:${bodyTop}px;height:${bodyHeight}px"></div>
-            <b style="top:${headTop-8}px">${p[0]}</b>
+            <b style="top:${headTop-8}px">${p[0]}<span class="heightValue">${Math.round(p[1])} см</span></b>
         </div>`;
     }).join('');
 
