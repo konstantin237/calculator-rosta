@@ -3,6 +3,9 @@ function calculateParents(){
     const mom=+document.getElementById('mom').value;
 
 
+    const avgMale=+document.getElementById('avgMale').value;
+    const avgFemale=+document.getElementById('avgFemale').value;
+
     if(!dad||!mom)return;
 
     // Формула Джона Хокера.html.
@@ -204,6 +207,84 @@ function calculateParents(){
 
     document.getElementById('advice').innerHTML=
         `<h3>Что показывает этот расчёт</h3><div class="comparison"><div class="comparisonRow"><div class="comparisonCell"><div class="comparisonLabel">Предполагаемый рост сына</div><div class="comparisonValue">${Math.round(sonHeight)} см</div></div><div class="comparisonCell"><div class="comparisonLabel">Предполагаемый рост дочери</div><div class="comparisonValue">${Math.round(daughterHeight)} см</div></div><div class="comparisonResult">Значения рассчитаны по формуле Джона Хокера.</div></div></div>`;
+
+
+        const parentAdvice = document.getElementById('advice');
+
+let adviceText = `
+    <h3>Что показывает этот расчёт</h3>
+    <div class="comparison">
+        <div class="comparisonRow">
+            <div class="comparisonCell">
+                <div class="comparisonLabel">Предполагаемый рост сына</div>
+                <div class="comparisonValue">${Math.round(sonHeight)} см</div>
+            </div>
+
+            <div class="comparisonCell">
+                <div class="comparisonLabel">Предполагаемый рост дочери</div>
+                <div class="comparisonValue">${Math.round(daughterHeight)} см</div>
+            </div>
+
+            <div class="comparisonResult">
+                Значения рассчитаны по формуле Джона Хокера.
+            </div>
+        </div>
+    </div>
+`;
+
+
+// СЫН
+if (sonMaxHeight < avgMale - 2) {
+    const deficit = avgMale - sonMaxHeight;
+
+    adviceText += `
+        <div class="comparisonResult advice percentileWarning">
+            Прогнозируемый максимальный рост сына (${Math.round(sonMaxHeight)} см)
+            на ${Math.round(deficit * 10) / 10} см ниже среднего роста мужчин
+            (${Math.round(avgMale * 10) / 10} см).
+            Сайт рекомендует посетить детского эндокринолога и обсудить,
+            есть ли медицинские показания к лечению, в том числе гормоном роста.
+        </div>
+    `;
+} else if (sonMaxHeight < avgMale) {
+    const deficit = avgMale - sonMaxHeight;
+
+    adviceText += `
+        <div class="comparisonResult advice ">
+            Прогнозируемый максимальный рост сына (${Math.round(sonMaxHeight)} см)
+            на ${Math.round(deficit * 10) / 10} см ниже среднего роста мужчин
+            (${Math.round(avgMale * 10) / 10} см), что не критично.
+        </div>
+    `;
+}
+
+
+// ДОЧЬ
+if (daughterMaxHeight < avgFemale - 2) {
+    const deficit = avgFemale - daughterMaxHeight;
+
+    adviceText += `
+        <div class="comparisonResult advice percentileWarning">
+            Прогнозируемый максимальный рост дочери (${Math.round(daughterMaxHeight)} см)
+            на ${Math.round(deficit * 10) / 10} см ниже среднего роста женщин
+            (${Math.round(avgFemale * 10) / 10} см).
+            Сайт рекомендует посетить детского эндокринолога и обсудить,
+            есть ли медицинские показания к лечению, в том числе гормоном роста.
+        </div>
+    `;
+} else if (daughterMaxHeight < avgFemale) {
+    const deficit = avgFemale - daughterMaxHeight;
+
+    adviceText += `
+        <div class="comparisonResult advice">
+            Прогнозируемый максимальный рост дочери (${Math.round(daughterMaxHeight)} см)
+            на ${Math.round(deficit * 10) / 10} см ниже среднего роста женщин
+            (${Math.round(avgFemale * 10) / 10} см), что не критично.
+        </div>
+    `;
+}
+
+parentAdvice.innerHTML = adviceText;
 }
 
 calculateParents();
