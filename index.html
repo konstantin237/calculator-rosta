@@ -190,6 +190,20 @@ h1, h2, h3, strong, .v {
 .divider {
   background: #98a2b3 !important;
 }
+.percentileWarning {
+  color: #c62828 !important;
+}
+.advice {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px solid #efb0b0;
+  border-radius: 8px;
+  background: #fff4f4;
+  color: #a61b1b !important;
+}
+.advice[hidden] {
+  display: none;
+}
 </style>
 
 </head>
@@ -299,6 +313,7 @@ h1, h2, h3, strong, .v {
         <div class="section">
           <h2>Что означает перцентиль</h2>
           <div id="percentileText" class="note">Примерно 30% мужчин в используемой взрослой референсной выборке ниже этого роста, а примерно 70% — выше.</div>
+          <div id="growthHormoneAdvice" class="advice" hidden></div>
         </div>
 
         <div class="source">
@@ -314,6 +329,8 @@ h1, h2, h3, strong, .v {
 
 <!-- Формула Джона Хокера.html скрипт:-->
 <script>
+const PERCENTILE_RECOMMENDATION_THRESHOLD = 50;
+
 function calculate(){
     const dad=+document.getElementById('dad').value;
     const mom=+document.getElementById('mom').value;
@@ -606,11 +623,27 @@ function calculate() {
   document.getElementById('rAdult').innerHTML = `<strong class="highlight">${fmt(adult)} см</strong>`;
   document.getElementById('rPercentile').innerHTML = `<strong class="highlight">${pText} перцентиль</strong>`;
   const low = Math.max(0, Math.min(100, perc.value));
-  document.getElementById('percentileText').textContent = perc.bound === '<'
-    ? `Прогноз ниже 5-го перцентиля используемой референсной выборки.`
-    : perc.bound === '>'
-      ? `Прогноз выше 95-го перцентиля используемой референсной выборки.`
-      : `В США или в России   ~${Math.round(100-low)}%  взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${Math.round(low)}% - ниже.`;
+  const adultsAbove = Math.round(100 - low);
+  const percentileText = document.getElementById('percentileText');
+  const growthHormoneAdvice = document.getElementById('growthHormoneAdvice');
+
+  percentileText.classList.remove('percentileWarning');
+  growthHormoneAdvice.hidden = true;
+  growthHormoneAdvice.textContent = '';
+
+  if (perc.bound === '<') {
+    percentileText.textContent = `Прогноз ниже 5-го перцентиля используемой референсной выборки.`;
+  } else if (perc.bound === '>') {
+    percentileText.textContent = `Прогноз выше 95-го перцентиля используемой референсной выборки.`;
+  } else {
+    percentileText.textContent = `В США или в России   ~${adultsAbove}%  взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${Math.round(low)}% - ниже.`;
+
+    if (adultsAbove > PERCENTILE_RECOMMENDATION_THRESHOLD) {
+      percentileText.classList.add('percentileWarning');
+      growthHormoneAdvice.hidden = false;
+      growthHormoneAdvice.textContent = `Т.к. ~${adultsAbove}% взрослых выше этого роста (${fmt(adult)} см), сайт рекомендует посетить эндокринолога и обсудить с ним вопрос о назначении гормона роста.`;
+    }
+  }
 }
 calculate();
 </script>
