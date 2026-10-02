@@ -1,0 +1,145 @@
+<!doctype html>
+
+<html lang="ru">
+<head>
+    
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Определитель роста</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body>
+    <!-- Формула Джона Хокера.html div-->
+<div class="wrap"><header><h1>Определитель будущего роста ребёнка во взрослом возрасте 
+  <br/></br>
+  
+  - и возможных диапазонов роста</h1>
+  </br>
+  <div class="lead">Введите рост папы и мамы. 
+    </br>
+    </br>
+    Сайт рассчитывает предполагаемый рост сына и дочери по формуле Джона Хокера — прямо на ростомере.</div></header><div class="layout"><section class="card"><h2>Родители</h2><label>Рост папы, см</label><input id="dad" type="number" min="70" max="250" value="185"><label>Рост мамы, см</label><input id="mom" type="number" min="70" max="250" value="145"><button onclick="calculate()">Рассчитать</button><div class="formula"><b>Формула Джона Хокера</b><br><br><b>Сын</b><br>(рост матери + рост отца) : 2 + 6,4<br><br><b>Дочь</b><br>(рост матери + рост отца) : 2 − 6,4</div><div class="note" style="margin-top:12px;background:#2a2030">
+<b>Почему это важно:</b> здесь специально используется более осторожный сценарий: сначала смотрим на рост-максимум ребёнка и сравниваем его со средним ростом людей его пола. Если даже максимум заметно ниже среднего, это повод обратиться к детскому эндокринологу и обсудить, есть ли медицинские показания к лечению, в том числе гормоном роста.
+</div>
+
+<!-- Формула Джона Хокера.html div-->
+<div class="disclaimer">Это визуальный калькулятор по заданной модели, а не медицинский способ прогнозирования взрослого роста. Порог ниже среднего используется здесь как логика сайта, а не как медицинский критерий назначения гормона роста. Решение о лечении принимает врач после оценки медицинских показаний.</div></section><section class="card"><div class="stageHeader">
+<div>Сын</div>
+<div>Родители<div class="parentNames"><span>Папа</span><span>Мама</span></div></div>
+<div>Дочь</div>
+</div><div class="stage"><div class="ruler" id="ruler"></div><div class="divider left"></div><div class="divider right"></div><div class="people" id="people"></div></div><div class="results"><div class="result"><h2>👦 Сын</h2><div class="num" id="sonHeight">—</div></div><div class="result"><h2>👧 Дочь</h2><div class="num" id="daughterHeight">—</div></div></div><div id="advice" class="advice"></div><div class="note">
+<b>Формула:</b> предполагаемый рост сына рассчитывается как средний рост родителей + 6,4 см, а дочери — как средний рост родителей − 6,4 см.<br><br>
+Расчёт является ориентировочным и не заменяет медицинскую оценку.
+</div></section></div></div>
+
+
+
+<!-- прогноз и перцентиль.html - див -->
+
+<div id="app">
+  <main class="wrap">
+    <header>
+      <div class="eyebrow">Калькулятор роста</div>
+      <h1>Прогноз взрослого роста ребёнка</h1>
+      <p class="lead">Расчёт использует процент взрослого роста из таблицы TW3 2012 для возраста 7–16 лет. Введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.</p>
+    </header>
+
+    <div class="grid">
+      <section class="card controls">
+        <div class="field">
+          <label for="gender">Пол</label>
+          <select id="gender">
+            <option value="male">Мальчик</option>
+            <option value="female">Девочка</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="age">Возраст, лет</label>
+          <div class="age-row">
+            <input id="ageRange" type="range" min="7" max="16" step="0.1" value="15">
+            <input id="age" type="number" min="7" max="16" step="0.1" value="15">
+          </div>
+          <div class="small" style="margin-top:7px">Для дробного возраста проценты интерполируются между соседними возрастами таблицы.</div>
+        </div>
+
+        <div class="field">
+          <label for="height">Текущий рост, см</label>
+          <input id="height" type="number" min="80" max="230" step="0.1" value="165">
+          <div id="heightError" class="error" hidden>Введите рост от 80 до 230 см.</div>
+        </div>
+
+        <div class="field">
+          <label for="avgMale">Средний рост мужчин, см</label>
+          <input id="avgMale" type="number" min="100" max="230" step="0.1" value="178">
+        </div>
+
+        <div class="field">
+          <label for="avgFemale">Средний рост женщин, см</label>
+          <input id="avgFemale" type="number" min="100" max="230" step="0.1" value="165">
+        </div>
+
+        <div class="refbox">
+          <strong>Средний рост (В США или в России)</strong>
+          <div id="averageText">178 см — мужчины</div>
+          <div id="averageText">165 см — женщины</div>
+          <br/>
+          <div class="small">
+            Если Вы в другой стране, то Вы можете узнать в интернете - какой средний рост мужчин и женщин в Вашей стране, и ввести эти значения.
+            <br/>  <br/>
+            После нажатия «Рассчитать» сайт использует новые значения.</div>
+
+        </div>
+        <button id="calc">Рассчитать</button>
+      </section>
+
+      <section class="card results">
+        <div class="result-head">
+          <div>
+            <div class="result-title">Результат</div>
+            <div id="summary" class="small">Мальчик, 15 лет, 165 см</div>
+          </div>
+          <div class="badge">TW3 2012</div>
+        </div>
+        <div></div>
+        <div class="hero">
+          <div class="metric"><div class="k">Уже достигнуто</div><div id="pctReached" class="v">96,5%</div></div>
+          <div class="metric"><div class="k">Прогноз взрослого роста</div><div id="adultHeight" class="v">171,0 см</div></div>
+          <div class="metric"><div class="k">Перцентиль взрослого роста</div><div id="percentile" class="v">≈30-й</div></div>
+        </div>
+        <div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Пол</th><th>Возраст</th><th>Рост</th><th>Уже достигнуто</th><th>Осталось вырасти</th><th>Прогноз взрослого роста</th><th>Перцентиль взрослого роста</th></tr></thead>
+            <tbody><tr>
+              <td id="rgender">Мальчик</td><td id="rAge">15 лет</td><td id="rHeight">165 см</td><td id="rReached">96,5%</td>
+              <td id="rRemaining"><strong class="highlight">6,0 см / 3,5%</strong></td><td id="rAdult"><strong class="highlight">171,0 см</strong></td><td id="rPercentile"><strong class="highlight">≈30-й перцентиль</strong></td>
+            </tr></tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Что означает перцентиль</h2>
+          <div id="percentileText" class="note">Примерно 30% мужчин в используемой взрослой референсной выборке ниже этого роста, а примерно 70% — выше.</div>
+          <div id="growthHormoneAdvice" class="advice" hidden></div>
+        </div>
+
+        <div class="source">
+          <div class="note"><strong>Источники методики:</strong> таблица IV статьи Flores-Olivares и соавт. (2019), показатель TW3 2012. Она содержит процент взрослого роста по возрасту и полу для 7–16 лет. Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023 и линейно интерполируется между указанными в источнике перцентилями.</div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+
+<script src="assets/js/script1.js"></script>
+
+</body>
+
+
+</html>
