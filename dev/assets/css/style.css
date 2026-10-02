@@ -1,7 +1,16 @@
 
 /* Формула Джона Хокера.html стили */
 
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#101522;color:#f3f5fb}.wrap{max-width:1200px;margin:auto;padding:28px 18px 60px}header,.card{background:#192238;border:1px solid #34405d;border-radius:20px}header{padding:24px;margin-bottom:18px}h1{margin:0 0 8px;font-size:34px}.lead{color:#b9c3d8;line-height:1.5}.layout{display:grid;grid-template-columns:320px 1fr;gap:18px}.card{padding:20px}label{display:block;color:#b9c3d8;margin:14px 0 7px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #4a5775;background:#0d1320;color:white;font-size:20px}button{width:100%;padding:13px;margin-top:18px;border:0;border-radius:10px;background:#e9edf7;color:#101522;font-weight:bold;font-size:16px;cursor:pointer}.formula{margin-top:18px;padding:14px;background:#0d1320;border-radius:10px;line-height:1.65;font-family:monospace}.stageHeader{
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#101522;color:#f3f5fb}.wrap{max-width:1200px;margin:auto;padding:28px 18px 60px}header,.card{background:#192238;border:1px solid #34405d;border-radius:20px}header{padding:24px;margin-bottom:18px}h1{margin:0 0 8px;font-size:34px}.lead{color:#b9c3d8;line-height:1.5}
+
+.layout{
+  display:grid;grid-template-columns:320px 1fr;gap:18px;
+
+  grid-template-columns: 210px 1fr;
+}
+  
+  
+  .card{padding:20px}label{display:block;color:#b9c3d8;margin:14px 0 7px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #4a5775;background:#0d1320;color:white;font-size:20px}button{width:100%;padding:13px;margin-top:18px;border:0;border-radius:10px;background:#e9edf7;color:#101522;font-weight:bold;font-size:16px;cursor:pointer}.formula{margin-top:18px;padding:14px;background:#0d1320;border-radius:10px;line-height:1.65;font-family:monospace}.stageHeader{
 position:relative;height:62px;margin-bottom:8px;color:#e7ebf5;
 display:grid;grid-template-columns:2fr 2fr 2fr;text-align:center;
 font-weight:800;font-size:15px;align-items:start;
@@ -35,7 +44,13 @@ font-size:13px;white-space:nowrap;z-index:4;text-align:center;line-height:1.25}
   
   .result{background:#0d1320;border:1px solid #34405d;border-radius:14px;padding:17px}.result h2{margin:0 0 8px;font-size:19px}.num{font-size:29px;font-weight:900}.muted{color:#aeb9d0;font-size:13px}.note{margin-top:14px;padding:15px;border-radius:12px;background:#202b44;line-height:1.5}.advice{margin-top:14px;padding:15px;border-radius:12px;border:1px solid #52688f;background:#151e31;line-height:1.5}
 .advice h3{margin:0 0 12px;font-size:17px}.comparison{display:grid;gap:10px}.comparisonRow{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#0d1320;border:1px solid #34405d;border-radius:10px;overflow:hidden}.comparisonCell{padding:12px;border-bottom:1px solid #34405d}.comparisonCell:first-child{border-right:1px solid #34405d}.comparisonLabel{color:#aeb9d0;font-size:12px;margin-bottom:4px}.comparisonValue{font-size:18px;font-weight:800}.comparisonResult{grid-column:1/-1;padding:12px;font-weight:700;line-height:1.45;background:#151e31}@media(max-width:600px){.comparisonRow{grid-template-columns:1fr}}
-.disclaimer{color:#9eabc4;font-size:12px;line-height:1.5;margin-top:16px}.rangeMarker{position:absolute;left:0;right:0;height:0;z-index:6;pointer-events:none;border-top:2px dashed #315efb}.rangeMarker span,.rangeMarker b{position:absolute;top:-18px;font-size:10px;line-height:14px;white-space:nowrap;background:#eef2f7;padding:1px 4px;border-radius:4px}.rangeMarker span{left:2px}.rangeMarker b{right:2px}.rangeMarker.sonMin span,.rangeMarker.sonMax span{left:8px}.rangeMarker.sonMin b,.rangeMarker.sonMax b{right:8px}.rangeMarker.daughterMin span,.rangeMarker.daughterMax span{left:8px}.rangeMarker.daughterMin b,.rangeMarker.daughterMax b{right:8px}.rangeMarker.sonMin{border-top-color:#d32f2f}.rangeMarker.sonMax{border-top-color:#2e7d32}.rangeMarker.daughterMin{border-top-color:#d32f2f}.rangeMarker.daughterMax{border-top-color:#2e7d32}.rangeMarker.sonMin span,.rangeMarker.sonMin b{color:#c62828}.rangeMarker.sonMax span,.rangeMarker.sonMax b{color:#2e7d32}.rangeMarker.daughterMin span,.rangeMarker.daughterMin b{color:#c62828}.rangeMarker.daughterMax span,.rangeMarker.daughterMax b{color:#2e7d32}@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{height:540px}.person{min-width:45px}.person b{font-size:10px}.body{width:45px}.son .body,.daughter .body{width:39px}}
+.disclaimer{color:#9eabc4;font-size:12px;line-height:1.5;margin-top:16px}.rangeMarker{position:absolute;left:0;right:0;height:0;z-index:6;pointer-events:none;border-top:2px dashed #315efb}.rangeMarker span,.rangeMarker b{position:absolute;top:-18px;font-size:10px;line-height:14px;white-space:nowrap;background:#eef2f7;padding:1px 4px;border-radius:4px}.rangeMarker span{left:2px}.rangeMarker b{right:2px}.rangeMarker.sonMin span,.rangeMarker.sonMax span{left:8px}.rangeMarker.sonMin b,.rangeMarker.sonMax b{right:8px}.rangeMarker.daughterMin span,.rangeMarker.daughterMax span{left:8px}.rangeMarker.daughterMin b,.rangeMarker.daughterMax b{right:8px}.rangeMarker.sonMin{border-top-color:#d32f2f}.rangeMarker.sonMax{border-top-color:#2e7d32}.rangeMarker.daughterMin{border-top-color:#d32f2f}.rangeMarker.daughterMax{border-top-color:#2e7d32}.rangeMarker.sonMin span,.rangeMarker.sonMin b{color:#c62828}.rangeMarker.sonMax span,.rangeMarker.sonMax b{color:#2e7d32}.rangeMarker.daughterMin span,.rangeMarker.daughterMin b{color:#c62828}.rangeMarker.daughterMax span,.rangeMarker.daughterMax b{color:#2e7d32}@media(max-width:850px){
+  
+  .layout{grid-template-columns:1fr;
+  }
+  
+  
+  .stage{height:540px}.person{min-width:45px}.person b{font-size:10px}.body{width:45px}.son .body,.daughter .body{width:39px}}
 
 
 
@@ -64,7 +79,10 @@ header { margin-bottom: 26px; }
 .eyebrow { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 9px; }
 h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.05; margin: 0 0 10px; letter-spacing: -.03em; }
 .lead { color: var(--muted); max-width: 760px; line-height: 1.55; margin: 0; }
-.grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+.grid { display: grid; 
+  grid-template-columns: 265px 1fr;
+  
+  gap: 20px; align-items: start; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); }
 .controls { padding: 22px; position: sticky; top: 18px; }
 .field { margin-bottom: 20px; }
@@ -200,4 +218,31 @@ h1, h2, h3, strong, .v {
 
 #growthHormoneAdvice{
   height: 98px !important;
+}
+
+/* Общий контейнер двух калькуляторов */
+.site-layout {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 38px 22px 54px;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+
+
+    margin-left: 34px;
+}
+
+.formula-section,
+.prediction-section {
+    min-width: 0;
+}
+
+@media (max-width: 1000px) {
+    .site-layout {
+        grid-template-columns: 1fr;
+    }
 }
