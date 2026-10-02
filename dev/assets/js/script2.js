@@ -415,8 +415,7 @@ function calculateGrowth() {
     !needsGrowthHormoneDiscussion;
 
   if (percentileHeader) {
-    percentileHeader.hidden =
-      !needsGrowthHormoneDiscussion;
+    percentileHeader.hidden = false;
   }
 
 
@@ -432,11 +431,10 @@ function calculateGrowth() {
     `<strong class="highlight">${pText} перцентиль</strong>`;
 
 
-  // Каждый новый расчёт сначала сбрасывает рекомендацию.
-  growthHormoneAdvice.hidden = true;
+  // Блок рекомендации всегда остаётся видимым.
+  growthHormoneAdvice.hidden = false;
   growthHormoneAdvice.textContent = '';
   growthHormoneAdvice.classList.remove('percentileWarning');
-
 
   // ================================================================
   // СЛУЧАЙ 1:
@@ -503,7 +501,7 @@ function calculateGrowth() {
     percentileText.textContent =
       `Прогнозируемый взрослый рост на ${fmt(deficitFromAverage)} см ниже среднего (${fmt(avg)} см), что не критично.`;
 
-    growthHormoneAdvice.hidden = true;
+    growthHormoneAdvice.hidden = false;
     growthHormoneAdvice.textContent = '';
 
   }
@@ -521,7 +519,7 @@ function calculateGrowth() {
     percentileText.textContent =
       `Прогнозируемый взрослый рост (${fmt(adult)} см) не ниже среднего (${fmt(avg)} см).`;
 
-    growthHormoneAdvice.hidden = true;
+    growthHormoneAdvice.hidden = false;
     growthHormoneAdvice.textContent = '';
 
   }

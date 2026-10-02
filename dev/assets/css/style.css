@@ -184,6 +184,7 @@ h1, h2, h3, strong, .v {
 }
 .percentileWarning {
   color: #c62828 !important;
+  
 }
 .advice {
   margin-top: 10px;
@@ -195,4 +196,8 @@ h1, h2, h3, strong, .v {
 }
 .advice[hidden] {
   display: none;
+}
+
+#growthHormoneAdvice{
+  height: 98px !important;
 }
