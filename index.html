@@ -44,7 +44,7 @@ font-size:13px;white-space:nowrap;z-index:4;text-align:center;line-height:1.25}
   
   .result{background:#0d1320;border:1px solid #34405d;border-radius:14px;padding:17px}.result h2{margin:0 0 8px;font-size:19px}.num{font-size:29px;font-weight:900}.muted{color:#aeb9d0;font-size:13px}.note{margin-top:14px;padding:15px;border-radius:12px;background:#202b44;line-height:1.5}.advice{margin-top:14px;padding:15px;border-radius:12px;border:1px solid #52688f;background:#151e31;line-height:1.5}
 .advice h3{margin:0 0 12px;font-size:17px}.comparison{display:grid;gap:10px}.comparisonRow{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#0d1320;border:1px solid #34405d;border-radius:10px;overflow:hidden}.comparisonCell{padding:12px;border-bottom:1px solid #34405d}.comparisonCell:first-child{border-right:1px solid #34405d}.comparisonLabel{color:#aeb9d0;font-size:12px;margin-bottom:4px}.comparisonValue{font-size:18px;font-weight:800}.comparisonResult{grid-column:1/-1;padding:12px;font-weight:700;line-height:1.45;background:#151e31}@media(max-width:600px){.comparisonRow{grid-template-columns:1fr}}
-.disclaimer{color:#9eabc4;font-size:12px;line-height:1.5;margin-top:16px}@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{height:540px}.person{min-width:45px}.person b{font-size:10px}.body{width:45px}.son .body,.daughter .body{width:39px}}
+.disclaimer{color:#9eabc4;font-size:12px;line-height:1.5;margin-top:16px}.rangeMarker{position:absolute;left:0;right:0;height:0;z-index:6;pointer-events:none;border-top:2px dashed #315efb}.rangeMarker span,.rangeMarker b{position:absolute;top:-18px;font-size:10px;line-height:14px;white-space:nowrap;background:#eef2f7;padding:1px 4px;border-radius:4px}.rangeMarker span{left:2px}.rangeMarker b{right:2px}.rangeMarker.sonMin span,.rangeMarker.sonMax span{left:8px}.rangeMarker.sonMin b,.rangeMarker.sonMax b{right:8px}.rangeMarker.daughterMin span,.rangeMarker.daughterMax span{left:8px}.rangeMarker.daughterMin b,.rangeMarker.daughterMax b{right:8px}.rangeMarker.sonMin,.rangeMarker.sonMax{border-top-color:#58a39d}.rangeMarker.daughterMin,.rangeMarker.daughterMax{border-top-color:#d29b62}.rangeMarker.sonMin span,.rangeMarker.sonMin b,.rangeMarker.sonMax span,.rangeMarker.sonMax b{color:#357b76}.rangeMarker.daughterMin span,.rangeMarker.daughterMin b,.rangeMarker.daughterMax span,.rangeMarker.daughterMax b{color:#a46f3f}@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{height:540px}.person{min-width:45px}.person b{font-size:10px}.body{width:45px}.son .body,.daughter .body{width:39px}}
 </style>
 
 
@@ -325,6 +325,15 @@ function calculate(){
     const sonHeight=(mom+dad)/2+6.4;
     const daughterHeight=(mom+dad)/2-6.4;
 
+    // Отдельные константы диапазона роста для мальчика и девочки.
+    const SON_GROWTH_RANGE = 10;
+    const DAUGHTER_GROWTH_RANGE = 10;
+
+    const sonMinHeight = sonHeight - SON_GROWTH_RANGE;
+    const sonMaxHeight = sonHeight + SON_GROWTH_RANGE;
+    const daughterMinHeight = daughterHeight - DAUGHTER_GROWTH_RANGE;
+    const daughterMaxHeight = daughterHeight + DAUGHTER_GROWTH_RANGE;
+
     document.getElementById('sonHeight').textContent=Math.round(sonHeight)+' см';
     document.getElementById('daughterHeight').textContent=Math.round(daughterHeight)+' см';
 
@@ -337,7 +346,11 @@ function calculate(){
 
     // Все реальные значения роста, используемые для построения ростомера.
     // Важно: этот массив должен быть создан ДО расчёта lo/hi.
-    const all=people.map(p=>p[1]);
+    const all=[
+        ...people.map(p=>p[1]),
+        sonMinHeight, sonMaxHeight,
+        daughterMinHeight, daughterMaxHeight
+    ];
 
     // ================================================================
     // РОСТОМЕР: КООРДИНАТЫ ЦИФР = ОСНОВА ДЛЯ ВСЕХ ФИГУР
@@ -455,7 +468,25 @@ function calculate(){
     const headTotal=headHeight+headBorder*2;
     const bodyGap=6;
 
-    document.getElementById('people').innerHTML=people.map(p=>{
+    // В массиве people дочь находится слева, сын — справа.
+    // Поэтому диапазон дочери рисуем в левой зоне,
+    // а диапазон сына — в правой зоне.
+    const rangeMarkers = [
+        ['Дочь — минимум', daughterMinHeight, 'daughterMin', 'daughter'],
+        ['Дочь — максимум', daughterMaxHeight, 'daughterMax', 'daughter'],
+        ['Сын — минимум', sonMinHeight, 'sonMin', 'son'],
+        ['Сын — максимум', sonMaxHeight, 'sonMax', 'son']
+    ];
+
+    const rangeMarkerHtml = rangeMarkers.map(([label, height, type, side]) => {
+        const y = growthLineY(height);
+        const sideStyle = side === 'daughter'
+            ? 'left:0;width:37.5%;'
+            : 'left:67%;width:33%;';
+        return `<div class="rangeMarker ${type}" style="top:${y}px;${sideStyle}"><span>${label}</span><b>${Math.round(height)} см</b></div>`;
+    }).join('');
+
+    document.getElementById('people').innerHTML=rangeMarkerHtml + people.map(p=>{
         const growthY=growthLineY(p[1]);
 
         // ВЕРХ головы = линия роста.
