@@ -89,11 +89,21 @@
 
         <div class="field">
           <label for="age">Возраст, лет, месяцев</label>
-          <label for="">(обязательно введите месяцы)</label>
+          <label for="">(введите сколько ЛЕТ и МЕСЯЦЕВ)</label>
+
+          <div class="age age-hint" style="    display: block;
+    font-size: 13px;
+    font-weight: 750;
+    margin-bottom: 8px;">
+            Лучше укажите костный возраст. Его можно определить по рентгену кисти у эндокринолога.
+          </div>
+
           <div class="age-row">
             <input id="ageRange" type="range" min="7" max="16" step="0.1" value="15">
             <input id="age" type="number" min="7" max="16" step="0.1" value="15">
           </div>
+
+        </div>
 
           <!--          <div class="small" style="margin-top:7px">Для дробного возраста проценты интерполируются между соседними возрастами таблицы.</div>
         -->
@@ -168,7 +178,13 @@
     grid-area:  table-wrap;
 ">
           <table>
-            <thead><tr><th>Пол</th><th>Возраст</th><th>Рост</th><th>Уже достигнуто</th><th>Осталось вырасти</th><th>Прогноз взрослого роста</th><th>Перцентиль взрослого роста</th></tr></thead>
+            <thead><tr><th>Пол</th>
+              
+              <th>Возраст</th>
+              
+              <th>Рост</th>
+              
+              <th>Уже достигнуто</th><th>Осталось вырасти</th><th>Прогноз взрослого роста</th><th>Перцентиль взрослого роста</th></tr></thead>
             <tbody><tr>
               <td id="rgender">Мальчик</td><td id="rAge">14,6 лет</td><td id="rHeight">165,0 см</td><td id="rReached">95,1%</td>
               <td id="rRemaining"><strong class="highlight">8,4 см / 4,9%</strong></td><td id="rAdult"><strong class="highlight">173,4 см</strong></td><td id="rPercentile"><strong class="highlight">≈41-й перцентиль</strong></td>
