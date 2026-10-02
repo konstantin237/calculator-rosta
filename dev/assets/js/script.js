@@ -612,7 +612,7 @@ function calculateGrowth() {
 
     growthHormoneAdvice.hidden = false;
 
-    growthHormoneAdvice.classList.add('percentileWarning');
+    growthHormoneAdvice.classList.add('percentileWarning', 'comparisonResult');
 
     growthHormoneAdvice.textContent =
       `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
