@@ -1,0 +1,592 @@
+<!doctype html>
+
+<html lang="ru">
+<head>
+    
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Калькулятор роста</title>
+
+<!-- Формула Джона Хокера.html стили-->
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#101522;color:#f3f5fb}.wrap{max-width:1200px;margin:auto;padding:28px 18px 60px}header,.card{background:#192238;border:1px solid #34405d;border-radius:20px}header{padding:24px;margin-bottom:18px}h1{margin:0 0 8px;font-size:34px}.lead{color:#b9c3d8;line-height:1.5}.layout{display:grid;grid-template-columns:320px 1fr;gap:18px}.card{padding:20px}label{display:block;color:#b9c3d8;margin:14px 0 7px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #4a5775;background:#0d1320;color:white;font-size:20px}button{width:100%;padding:13px;margin-top:18px;border:0;border-radius:10px;background:#e9edf7;color:#101522;font-weight:bold;font-size:16px;cursor:pointer}.formula{margin-top:18px;padding:14px;background:#0d1320;border-radius:10px;line-height:1.65;font-family:monospace}.stageHeader{
+position:relative;height:62px;margin-bottom:8px;color:#e7ebf5;
+display:grid;grid-template-columns:2fr 2fr 2fr;text-align:center;
+font-weight:800;font-size:15px;align-items:start;
+}
+.stageHeader .parentNames{
+font-size:12px;color:#aeb9d0;font-weight:400;margin-top:5px;
+display:flex;justify-content:center;gap:95px;
+}
+.stage{height:660px;position:relative;overflow:visible;border-radius:14px;background:linear-gradient(#1c2945,#0d1423)}.ruler{position:absolute;left:8px;z-index:3;top:20px;height:535px;width:55px;border-right:2px solid #71809f}.tick{position:absolute;right:6px;height:14px;line-height:14px;color:#aeb9d0;font-size:11px}.divider{position:absolute;top:20px;bottom:20px;width:2px;background:#71809f;opacity:.75;z-index:1}.divider.left{left:37.5%}.divider.right{left:67%}.stageHeaders{position:absolute;top:18px;left:65px;right:12px;display:grid;grid-template-columns:2fr 2fr 2fr;text-align:center;font-weight:800;font-size:15px;color:#e7ebf5}.parentHeader{position:absolute;top:43px;left:65px;right:12px;display:flex;justify-content:center;gap:95px;font-size:12px;color:#aeb9d0}
+.people{position:absolute;left:65px;right:12px;top:20px;height:535px;
+display:flex;align-items:flex-end;justify-content:space-around;gap:4px}.person{height:100%;flex:1;min-width:70px;position:relative;
+display:block;text-align:center}
+.personGuide{position:absolute;height:2px;background:#e7ebf5;opacity:.95;
+left:calc(50% - 16px);width:32px;z-index:5;pointer-events:none}.personHead{
+position:absolute;
+width:45px;
+height:100px;
+border-radius:50% 50% 43% 43% / 43% 43% 57% 57%;
+left:50%;
+transform:translateX(-50%);
+background:#f1c7a5;
+border:3px solid #8095c9;
+z-index:3
+}.personBody{position:absolute;width:58px;left:50%;transform:translateX(-50%);border-radius:30px 30px 8px 8px;background:#8095c9;z-index:2}.dad .personBody{background:#5973aa}.mom .personBody{background:#d29b62}.son .personBody{width:50px;background:#58a39d}.daughter .personBody{width:50px;background:linear-gradient(90deg,#f7dce9,#fff7fb)}.person b{position:absolute;left:50%;transform:translate(-50%, -100%);
+font-size:13px;white-space:nowrap;z-index:4;text-align:center;line-height:1.25}
+.person b .heightValue{display:block;font-size:12px;font-weight:400;color:#aeb9d0;margin-top:2px}.person small{display:none} 
+
+.results {display:grid;grid-template-columns:1fr;
+  
+  gap:12px;margin-top:14px}
+  
+  .result{background:#0d1320;border:1px solid #34405d;border-radius:14px;padding:17px}.result h2{margin:0 0 8px;font-size:19px}.num{font-size:29px;font-weight:900}.muted{color:#aeb9d0;font-size:13px}.note{margin-top:14px;padding:15px;border-radius:12px;background:#202b44;line-height:1.5}.advice{margin-top:14px;padding:15px;border-radius:12px;border:1px solid #52688f;background:#151e31;line-height:1.5}
+.advice h3{margin:0 0 12px;font-size:17px}.comparison{display:grid;gap:10px}.comparisonRow{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#0d1320;border:1px solid #34405d;border-radius:10px;overflow:hidden}.comparisonCell{padding:12px;border-bottom:1px solid #34405d}.comparisonCell:first-child{border-right:1px solid #34405d}.comparisonLabel{color:#aeb9d0;font-size:12px;margin-bottom:4px}.comparisonValue{font-size:18px;font-weight:800}.comparisonResult{grid-column:1/-1;padding:12px;font-weight:700;line-height:1.45;background:#151e31}@media(max-width:600px){.comparisonRow{grid-template-columns:1fr}}
+.disclaimer{color:#9eabc4;font-size:12px;line-height:1.5;margin-top:16px}@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{height:540px}.person{min-width:45px}.person b{font-size:10px}.body{width:45px}.son .body,.daughter .body{width:39px}}
+</style>
+
+
+<!-- прогноз и перцентиль.html стили -->
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: light-dark(#f5f7fb, #101319);
+  --surface: light-dark(#ffffff, #181c24);
+  --surface2: light-dark(#f0f3f8, #202631);
+  --text: light-dark(#172033, #f1f4f8);
+  --muted: light-dark(#667085, #a9b2c2);
+  --border: light-dark(#dce2eb, #303846);
+  --accent: light-dark(#315efb, #7d98ff);
+  --accent2: light-dark(#eaf0ff, #263252);
+  --good: light-dark(#087443, #5dd39e);
+  --shadow: 0 14px 40px rgba(20, 32, 55, .08);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+#app { min-height: 100vh; background: var(--bg); border-radius: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 38px 22px 54px; }
+header { margin-bottom: 26px; }
+.eyebrow { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 9px; }
+h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.05; margin: 0 0 10px; letter-spacing: -.03em; }
+.lead { color: var(--muted); max-width: 760px; line-height: 1.55; margin: 0; }
+.grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); }
+.controls { padding: 22px; position: sticky; top: 18px; }
+.field { margin-bottom: 20px; }
+label { display: block; font-size: 13px; font-weight: 750; margin-bottom: 8px; }
+select, input[type=number] { width: 100%; height: 46px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface); color: var(--text); padding: 0 13px; font-size: 16px; outline: none; }
+select:focus, input[type=number]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent2); }
+.age-row { display: grid; grid-template-columns: 1fr 92px; gap: 10px; align-items: center; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.small { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.refbox { background: var(--surface2); border-radius: 13px; padding: 13px; margin-top: 8px; }
+.refbox strong { display: block; margin-bottom: 5px; }
+button { width: 100%; border: 0; border-radius: 11px; height: 46px; background: var(--accent); color: white; font-weight: 800; font-size: 15px; cursor: pointer; }
+button:hover { filter: brightness(1.06); }
+.results { padding: 22px; }
+.result-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+.result-title { font-size: 18px; font-weight: 800; margin: 0 0 5px; }
+.badge { white-space: nowrap; padding: 7px 10px; border-radius: 999px; background: var(--accent2); color: var(--accent); font-size: 12px; font-weight: 800; }
+.hero { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+.metric { background: var(--surface2); border-radius: 14px; padding: 15px; min-height: 92px; }
+.metric .k { color: var(--muted); font-size: 12px; margin-bottom: 7px; }
+.metric .v { font-size: 25px; font-weight: 850; letter-spacing: -.025em; }
+.table-wrap { overflow-x: visible; border: 1px solid var(--border); border-radius: 13px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 0;
+
+}
+
+th, td { padding: 12px 13px; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); background: var(--surface2); }
+td { font-size: 14px; }
+tr:last-child td { border-bottom: 0; }
+strong.highlight { color: var(--accent); }
+.section { margin-top: 20px; }
+.section h2 { font-size: 15px; margin: 0 0 9px; }
+.note { color: var(--muted); font-size: 12px; line-height: 1.55; }
+.source { padding: 16px 18px; border-top: 1px solid var(--border); margin-top: 18px; }
+.source a { color: var(--accent); }
+.error { color: #c62828; font-size: 13px; margin-top: 7px; }
+@media (max-width: 820px) {
+  .grid { grid-template-columns: 1fr; }
+  .controls { position: static; }
+}
+@media (max-width: 560px) {
+  .wrap { padding: 25px 14px 40px; }
+  .hero { grid-template-columns: 1fr; }
+  .result-head { flex-direction: column; }
+}
+</style>
+
+
+
+<style id="light-theme-override">
+html, body, #app {
+  background: #f5f7fb !important;
+  color: #172033 !important;
+}
+header, .card {
+  background: #ffffff !important;
+  color: #172033 !important;
+  border-color: #dce2eb !important;
+}
+.stage {
+  background: #eef2f7 !important;
+}
+.stageHeader, .stageHeaders {
+  color: #172033 !important;
+}
+.parentNames, .parentHeader, .tick, .lead, label, .small, .muted,
+.disclaimer, .note, .comparisonLabel, .metric .k, .source .note {
+  color: #667085 !important;
+}
+input, select, input[type=number] {
+  background: #ffffff !important;
+  color: #172033 !important;
+  border-color: #cfd6e2 !important;
+}
+.formula, .result, .comparisonRow, .comparisonResult,
+.refbox, .metric, .note, .advice {
+  background: #f0f3f8 !important;
+  color: #172033 !important;
+  border-color: #dce2eb !important;
+}
+.table-wrap, table, th, td {
+  border-color: #dce2eb !important;
+}
+th {
+  background: #f0f3f8 !important;
+  color: #667085 !important;
+}
+td {
+  color: #172033 !important;
+}
+.result h2, .result-title, .comparisonValue, .num,
+h1, h2, h3, strong, .v {
+  color: #172033 !important;
+}
+.badge {
+  background: #eaf0ff !important;
+}
+.person b {
+  color: #172033 !important;
+}
+.person b .heightValue {
+  color: #667085 !important;
+}
+.personGuide {
+  background: #667085 !important;
+}
+.ruler {
+  border-right-color: #98a2b3 !important;
+}
+.divider {
+  background: #98a2b3 !important;
+}
+</style>
+
+</head>
+
+<body>
+    <!-- Формула Джона Хокера.html div-->
+<div class="wrap"><header><h1>Калькулятор роста</h1><div class="lead">Введите рост папы и мамы. Сайт рассчитывает предполагаемый рост сына и дочери по формуле Джона Хокера — прямо на ростомере.</div></header><div class="layout"><section class="card"><h2>Родители</h2><label>Рост папы, см</label><input id="dad" type="number" min="70" max="250" value="185"><label>Рост мамы, см</label><input id="mom" type="number" min="70" max="250" value="145"><button onclick="calculate()">Рассчитать</button><div class="formula"><b>Формула Джона Хокера</b><br><br><b>Сын</b><br>(рост матери + рост отца) : 2 + 6,4<br><br><b>Дочь</b><br>(рост матери + рост отца) : 2 − 6,4</div><div class="note" style="margin-top:12px;background:#2a2030">
+<b>Почему это важно:</b> здесь специально используется более осторожный сценарий: сначала смотрим на рост-максимум ребёнка и сравниваем его со средним ростом людей его пола. Если даже максимум заметно ниже среднего, это повод обратиться к детскому эндокринологу и обсудить, есть ли медицинские показания к лечению, в том числе гормоном роста.
+</div>
+
+<!-- Формула Джона Хокера.html div-->
+<div class="disclaimer">Это визуальный калькулятор по заданной модели, а не медицинский способ прогнозирования взрослого роста. Порог ниже среднего используется здесь как логика сайта, а не как медицинский критерий назначения гормона роста. Решение о лечении принимает врач после оценки медицинских показаний.</div></section><section class="card"><div class="stageHeader">
+<div>Сын</div>
+<div>Родители<div class="parentNames"><span>Папа</span><span>Мама</span></div></div>
+<div>Дочь</div>
+</div><div class="stage"><div class="ruler" id="ruler"></div><div class="divider left"></div><div class="divider right"></div><div class="people" id="people"></div></div><div class="results"><div class="result"><h2>👦 Сын</h2><div class="num" id="sonHeight">—</div></div><div class="result"><h2>👧 Дочь</h2><div class="num" id="daughterHeight">—</div></div></div><div id="advice" class="advice"></div><div class="note">
+<b>Формула:</b> предполагаемый рост сына рассчитывается как средний рост родителей + 6,4 см, а дочери — как средний рост родителей − 6,4 см.<br><br>
+Расчёт является ориентировочным и не заменяет медицинскую оценку.
+</div></section></div></div>
+
+
+
+<!-- прогноз и перцентиль.html - див -->
+
+<div id="app">
+  <main class="wrap">
+    <header>
+      <div class="eyebrow">Калькулятор роста</div>
+      <h1>Прогноз взрослого роста ребёнка</h1>
+      <p class="lead">Расчёт использует процент взрослого роста из таблицы TW3 2012 для возраста 7–16 лет. Введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.</p>
+    </header>
+
+    <div class="grid">
+      <section class="card controls">
+        <div class="field">
+          <label for="gender">Пол</label>
+          <select id="gender">
+            <option value="male">Мальчик</option>
+            <option value="female">Девочка</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="age">Возраст, лет</label>
+          <div class="age-row">
+            <input id="ageRange" type="range" min="7" max="16" step="0.1" value="15">
+            <input id="age" type="number" min="7" max="16" step="0.1" value="15">
+          </div>
+          <div class="small" style="margin-top:7px">Для дробного возраста проценты интерполируются между соседними возрастами таблицы.</div>
+        </div>
+
+        <div class="field">
+          <label for="height">Текущий рост, см</label>
+          <input id="height" type="number" min="80" max="230" step="0.1" value="165">
+          <div id="heightError" class="error" hidden>Введите рост от 80 до 230 см.</div>
+        </div>
+
+        <div class="field">
+          <label for="avgMale">Средний рост мужчин, см</label>
+          <input id="avgMale" type="number" min="100" max="230" step="0.1" value="178">
+        </div>
+
+        <div class="field">
+          <label for="avgFemale">Средний рост женщин, см</label>
+          <input id="avgFemale" type="number" min="100" max="230" step="0.1" value="165">
+        </div>
+
+        <div class="refbox">
+          <strong>Средний рост (В США или в России)</strong>
+          <div id="averageText">178 см — мужчины</div>
+          <div id="averageText">165 см — женщины</div>
+          <br/>
+          <div class="small">
+            Если Вы в другой стране, то Вы можете узнать в интернете - какой средний рост мужчин и женщин в Вашей стране, и ввести эти значения.
+            <br/>  <br/>
+            После нажатия «Рассчитать» сайт использует новые значения.</div>
+
+        </div>
+        <button id="calc">Рассчитать</button>
+      </section>
+
+      <section class="card results">
+        <div class="result-head">
+          <div>
+            <div class="result-title">Результат</div>
+            <div id="summary" class="small">Мальчик, 15 лет, 165 см</div>
+          </div>
+          <div class="badge">TW3 2012</div>
+        </div>
+        <div></div>
+        <div class="hero">
+          <div class="metric"><div class="k">Уже достигнуто</div><div id="pctReached" class="v">96,5%</div></div>
+          <div class="metric"><div class="k">Прогноз взрослого роста</div><div id="adultHeight" class="v">171,0 см</div></div>
+          <div class="metric"><div class="k">Перцентиль взрослого роста</div><div id="percentile" class="v">≈30-й</div></div>
+        </div>
+        <div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Пол</th><th>Возраст</th><th>Рост</th><th>Уже достигнуто</th><th>Осталось вырасти</th><th>Прогноз взрослого роста</th><th>Перцентиль взрослого роста</th></tr></thead>
+            <tbody><tr>
+              <td id="rgender">Мальчик</td><td id="rAge">15 лет</td><td id="rHeight">165 см</td><td id="rReached">96,5%</td>
+              <td id="rRemaining"><strong class="highlight">6,0 см / 3,5%</strong></td><td id="rAdult"><strong class="highlight">171,0 см</strong></td><td id="rPercentile"><strong class="highlight">≈30-й перцентиль</strong></td>
+            </tr></tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Что означает перцентиль</h2>
+          <div id="percentileText" class="note">Примерно 30% мужчин в используемой взрослой референсной выборке ниже этого роста, а примерно 70% — выше.</div>
+        </div>
+
+        <div class="source">
+          <div class="note"><strong>Источники методики:</strong> таблица IV статьи Flores-Olivares и соавт. (2019), показатель TW3 2012. Она содержит процент взрослого роста по возрасту и полу для 7–16 лет. Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023 и линейно интерполируется между указанными в источнике перцентилями.</div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+
+
+
+<!-- Формула Джона Хокера.html скрипт:-->
+<script>
+function calculate(){
+    const dad=+document.getElementById('dad').value;
+    const mom=+document.getElementById('mom').value;
+    if(!dad||!mom)return;
+
+    // Формула Джона Хокера.html.
+    // Сын: (рост матери + рост отца) / 2 + 6,4.
+    // Дочь: (рост матери + рост отца) / 2 - 6,4.
+    const sonHeight=(mom+dad)/2+6.4;
+    const daughterHeight=(mom+dad)/2-6.4;
+
+    document.getElementById('sonHeight').textContent=Math.round(sonHeight)+' см';
+    document.getElementById('daughterHeight').textContent=Math.round(daughterHeight)+' см';
+
+    const people=[
+        ['Дочь',daughterHeight,'daughter'],
+        ['Папа',dad,'dad'],
+        ['Мама',mom,'mom'],
+        ['Сын',sonHeight,'son']
+    ];
+
+    // Все реальные значения роста, используемые для построения ростомера.
+    // Важно: этот массив должен быть создан ДО расчёта lo/hi.
+    const all=people.map(p=>p[1]);
+
+    // ================================================================
+    // РОСТОМЕР: КООРДИНАТЫ ЦИФР = ОСНОВА ДЛЯ ВСЕХ ФИГУР
+    // ================================================================
+    const lo=Math.floor((Math.min(...all)-10)/5)*5;
+    const hi=Math.ceil((Math.max(...all)+10)/5)*5;
+    const H=535;
+
+    /*
+       Сначала физически создаём цифры ростомера.
+
+       Для КАЖДОЙ цифры запоминаем:
+         x  = её горизонтальная координата
+         y  = НИЖНЮЮ координату цифры
+
+       Именно эти координаты потом используются для фигур.
+       Отдельной шкалы для фигур НЕТ.
+    */
+    const rulerCoords={};
+    let ticks='';
+
+    for(let h=lo;h<=hi;h+=5){
+        const bottomY=H-(h-lo)*(H/(hi-lo));
+        const topY=bottomY-14;
+
+        // Пока только создаём цифры.
+        // Реальные x/y будут считаны НИЖЕ, после вставки в DOM.
+        ticks+=`<div class="tick" data-height="${h}" style="top:${topY}px">${h}</div>`;
+    }
+
+    const ruler=document.getElementById('ruler');
+    ruler.innerHTML=ticks;
+
+    /*
+       Теперь цифры уже реально существуют на странице.
+       Запоминаем ИХ ФАКТИЧЕСКИЕ координаты:
+         x = offsetLeft
+         y = offsetTop + offsetHeight = нижний край цифры
+
+       Это именно та координата, которую потом используем
+       для постановки линии роста.
+    */
+    ruler.querySelectorAll('.tick').forEach(el=>{
+        const h=Number(el.dataset.height);
+
+        rulerCoords[h]={
+            x:el.offsetLeft,
+            y:el.offsetTop+el.offsetHeight
+        };
+    });
+
+    /*
+       ГЛАВНАЯ ЛОГИКА.
+
+       Если рост ровно кратен 5:
+          170 -> берём НИЖНИЙ Y цифры 170.
+
+       Если рост НЕ кратен 5:
+          171, 172, 173, 174
+          находятся в промежутке 170..175.
+
+       Для ВСЕХ этих значений берём:
+          (нижний Y цифры 170 + нижний Y цифры 175) / 2
+
+       То есть они получают ОДИНАКОВУЮ горизонтальную линию,
+       строго посередине между двумя ближайшими цифрами ростомера.
+
+       Это специально НЕ является пропорциональной интерполяцией.
+    */
+    function growthLineY(height){
+        const roundedHeight=Math.round(height);
+
+        // Точное значение, кратное 5:
+        if(roundedHeight % 5 === 0 && rulerCoords[roundedHeight]){
+            return rulerCoords[roundedHeight].y;
+        }
+
+        // Нижняя и верхняя отметки, кратные 5.
+        const lower=Math.floor(height/5)*5;
+        const upper=lower+5;
+
+        const lowerPoint=rulerCoords[lower];
+        const upperPoint=rulerCoords[upper];
+
+        if(lowerPoint && upperPoint){
+            // СТРОГО СЕРЕДИНА между нижними Y двух цифр.
+            return (lowerPoint.y + upperPoint.y) / 2;
+        }
+
+        // Запасной вариант только если значение вышло за созданный ростомер.
+        return H-(height-lo)*(H/(hi-lo));
+    }
+
+    /*
+       Фигура:
+
+       ───────────────  <- горизонтальная линия роста
+              ○         <- ВЕРХ круга совпадает с линией
+             /|\
+             / \
+
+       Линия касается круга именно сверху.
+       Тело начинается ниже головы.
+    */
+    // Голова должна занимать примерно 19 см по высоте.
+    // Больший диаметр овала расположен вертикально.
+    // Меньший диаметр = 45% от большего.
+    //
+    // Высота ростомера H соответствует диапазону hi-lo сантиметров,
+    // поэтому 19 см переводим в реальные пиксели этого ростомера.
+    const headHeightCm=19;
+    const headHeight=19*(H/(hi-lo));
+    const headWidth=headHeight*0.45;
+    const headBorder=3;
+    const headTotal=headHeight+headBorder*2;
+    const bodyGap=6;
+
+    document.getElementById('people').innerHTML=people.map(p=>{
+        const growthY=growthLineY(p[1]);
+
+        // ВЕРХ головы = линия роста.
+        const headTop=growthY;
+
+        // Тело начинается под кругом.
+        const bodyTop=headTop+headTotal+bodyGap;
+        const bodyHeight=Math.max(20,H-bodyTop);
+
+        // Горизонтальная линия роста для каждой фигуры.
+        const guide=
+            `<div class="personGuide"
+                  style="top:${growthY}px;
+                         left:calc(50% - 32px);
+                         width:64px"></div>`;
+
+        return `<div class="person ${p[2]}">
+            ${guide}
+            <div class="personHead" style="top:${headTop}px;width:${headWidth}px;height:${headHeight}px"></div>
+            <div class="personBody" style="top:${bodyTop}px;height:${bodyHeight}px"></div>
+            <b style="top:${headTop-8}px">${p[0]}<span class="heightValue">${Math.round(p[1])} см</span></b>
+        </div>`;
+    }).join('');
+
+    document.getElementById('advice').innerHTML=
+        `<h3>Что показывает этот расчёт</h3><div class="comparison"><div class="comparisonRow"><div class="comparisonCell"><div class="comparisonLabel">Предполагаемый рост сына</div><div class="comparisonValue">${Math.round(sonHeight)} см</div></div><div class="comparisonCell"><div class="comparisonLabel">Предполагаемый рост дочери</div><div class="comparisonValue">${Math.round(daughterHeight)} см</div></div><div class="comparisonResult">Значения рассчитаны по формуле Джона Хокера.</div></div></div>`;
+}
+calculate();
+</script>
+
+
+<!-- прогноз и перцентиль.html скрипт:-->
+<script>
+const AHP = {
+  male: [
+    [7,69.4],[8,72.6],[9,75.6],[10,78.4],[11,80.8],[12,84.5],[13,88.2],[14,93.1],[15,96.5],[16,98.1]
+  ],
+  female: [
+    [7,74.2],[8,77.9],[9,81.2],[10,85.4],[11,88.8],[12,92.0],[13,96.2],[14,98.0],[15,99.0],[16,99.2]
+  ]
+};
+// CDC/NHANES US adults 20+ (2021–2023): percentile -> cm.
+const ADULT_REF = {
+  male: [[5,162.2],[10,165.2],[15,167.5],[25,170.0],[50,175.2],[75,180.1],[85,183.0],[90,184.8],[95,187.2]],
+  female: [[5,149.6],[10,152.0],[15,153.9],[25,156.4],[50,161.2],[75,166.1],[85,168.6],[90,170.4],[95,172.5]]
+};
+const AVG = { male:178, female:165 };
+const genderEl = document.getElementById('gender');
+const avgMaleEl = document.getElementById('avgMale');
+const avgFemaleEl = document.getElementById('avgFemale');
+const ageEl = document.getElementById('age');
+const rangeEl = document.getElementById('ageRange');
+const heightEl = document.getElementById('height');
+rangeEl.addEventListener('input', () => { ageEl.value = rangeEl.value; calculate(); });
+ageEl.addEventListener('input', () => { rangeEl.value = Math.max(7, Math.min(16, Number(ageEl.value) || 7)); calculate(); });
+genderEl.addEventListener('change', calculate);
+heightEl.addEventListener('input', calculate);
+document.getElementById('calc').addEventListener('click', calculate);
+function fmt(n, digits=1) { return n.toFixed(digits).replace('.', ','); }
+function interpolate(rows, age) {
+  if (age <= rows[0][0]) return rows[0][1];
+  if (age >= rows[rows.length-1][0]) return rows[rows.length-1][1];
+  for (let i=0;i<rows.length-1;i++) {
+    const [x1,y1] = rows[i], [x2,y2] = rows[i+1];
+    if (age >= x1 && age <= x2) return y1 + (age-x1)*(y2-y1)/(x2-x1);
+  }
+}
+function percentile(height, gender) {
+  const rows = ADULT_REF[gender];
+  if (height < rows[0][1]) return { value: 5, bound: '<' };
+  if (height > rows[rows.length-1][1]) return { value: 95, bound: '>' };
+  for (let i=0;i<rows.length-1;i++) {
+    const [p1,h1] = rows[i], [p2,h2] = rows[i+1];
+    if (height >= h1 && height <= h2) {
+      const p = p1 + (height-h1)*(p2-p1)/(h2-h1);
+      return { value:p, bound:'' };
+    }
+  }
+  return { value:50, bound:'' };
+}
+function calculate() {
+  const gender = genderEl.value;
+  let age = Number(ageEl.value);
+  const height = Number(heightEl.value);
+  const avgMale = Number(avgMaleEl.value);
+  const avgFemale = Number(avgFemaleEl.value);
+  const err = document.getElementById('heightError');
+  if (!Number.isFinite(age)) age = 15;
+  age = Math.max(7, Math.min(16, age));
+  rangeEl.value = age;
+  if (!Number.isFinite(height) || height < 80 || height > 230) { err.hidden=false; return; }
+  err.hidden=true;
+  if (!Number.isFinite(avgMale) || avgMale < 100 || avgMale > 230 ||
+      !Number.isFinite(avgFemale) || avgFemale < 100 || avgFemale > 230) {
+    return;
+  }
+  AVG.male = avgMale;
+  AVG.female = avgFemale;
+  const reached = interpolate(AHP[gender], age);
+  const adult = height / (reached/100);
+  const remainingCm = adult - height;
+  const remainingPct = 100 - reached;
+  const perc = percentile(adult, gender);
+  const pText = perc.bound === '<' ? `<${perc.value}-го` : perc.bound === '>' ? `>${perc.value}-го` : `≈${Math.round(perc.value)}-й`;
+  const genderName = gender === 'male' ? 'Мальчик' : 'Девочка';
+  const avg = AVG[gender];
+  document.getElementById('averageText').textContent = `${avg} см — ${gender === 'male' ? 'мужчины' : 'женщины'}`;
+  document.getElementById('summary').textContent = `${genderName}, ${fmt(age, age % 1 ? 1 : 0)} лет, ${fmt(height)} см`;
+  document.getElementById('pctReached').textContent = `${fmt(reached)}%`;
+  document.getElementById('adultHeight').textContent = `${fmt(adult)} см`;
+  document.getElementById('percentile').textContent = `${pText}`;
+  document.getElementById('rgender').textContent = genderName;
+  document.getElementById('rAge').textContent = `${fmt(age, age % 1 ? 1 : 0)} лет`;
+  document.getElementById('rHeight').textContent = `${fmt(height)} см`;
+  document.getElementById('rReached').textContent = `${fmt(reached)}%`;
+  document.getElementById('rRemaining').innerHTML = `<strong class="highlight">${fmt(Math.max(0,remainingCm))} см / ${fmt(remainingPct)}%</strong>`;
+  document.getElementById('rAdult').innerHTML = `<strong class="highlight">${fmt(adult)} см</strong>`;
+  document.getElementById('rPercentile').innerHTML = `<strong class="highlight">${pText} перцентиль</strong>`;
+  const low = Math.max(0, Math.min(100, perc.value));
+  document.getElementById('percentileText').textContent = perc.bound === '<'
+    ? `Прогноз ниже 5-го перцентиля используемой референсной выборки.`
+    : perc.bound === '>'
+      ? `Прогноз выше 95-го перцентиля используемой референсной выборки.`
+      : `В США или в России   ~${Math.round(100-low)}%  взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${Math.round(low)}% - ниже.`;
+}
+calculate();
+</script>
+
+
+
+</body>
+
+
+</html>

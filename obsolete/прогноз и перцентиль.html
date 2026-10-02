@@ -85,8 +85,8 @@ strong.highlight { color: var(--accent); }
     <div class="grid">
       <section class="card controls">
         <div class="field">
-          <label for="sex">Пол</label>
-          <select id="sex">
+          <label for="gender">Пол</label>
+          <select id="gender">
             <option value="male">Мальчик</option>
             <option value="female">Девочка</option>
           </select>
@@ -107,10 +107,26 @@ strong.highlight { color: var(--accent); }
           <div id="heightError" class="error" hidden>Введите рост от 80 до 230 см.</div>
         </div>
 
+        <div class="field">
+          <label for="avgMale">Средний рост мужчин, см</label>
+          <input id="avgMale" type="number" min="100" max="230" step="0.1" value="178">
+        </div>
+
+        <div class="field">
+          <label for="avgFemale">Средний рост женщин, см</label>
+          <input id="avgFemale" type="number" min="100" max="230" step="0.1" value="165">
+        </div>
+
         <div class="refbox">
-          <strong>Средний рост для сравнения</strong>
+          <strong>Средний рост (В США или в России)</strong>
           <div id="averageText">178 см — мужчины</div>
-          <div class="small">В калькуляторе сохранены заданные ориентиры: 178 см для мужчин и 165 см для женщин. Они показываются отдельно от перцентиля.</div>
+          <div id="averageText">165 см — женщины</div>
+          <br/>
+          <div class="small">
+            Если Вы в другой стране, то Вы можете узнать в интернете - какой средний рост мужчин и женщин в Вашей стране, и ввести эти значения.
+            <br/>  <br/>
+            После нажатия «Рассчитать» сайт использует новые значения.</div>
+
         </div>
         <button id="calc">Рассчитать</button>
       </section>
@@ -134,7 +150,7 @@ strong.highlight { color: var(--accent); }
           <table>
             <thead><tr><th>Пол</th><th>Возраст</th><th>Рост</th><th>Уже достигнуто</th><th>Осталось вырасти</th><th>Прогноз взрослого роста</th><th>Перцентиль взрослого роста</th></tr></thead>
             <tbody><tr>
-              <td id="rSex">Мальчик</td><td id="rAge">15 лет</td><td id="rHeight">165 см</td><td id="rReached">96,5%</td>
+              <td id="rgender">Мальчик</td><td id="rAge">15 лет</td><td id="rHeight">165 см</td><td id="rReached">96,5%</td>
               <td id="rRemaining"><strong class="highlight">6,0 см / 3,5%</strong></td><td id="rAdult"><strong class="highlight">171,0 см</strong></td><td id="rPercentile"><strong class="highlight">≈30-й перцентиль</strong></td>
             </tr></tbody>
           </table>
@@ -167,13 +183,15 @@ const ADULT_REF = {
   female: [[5,149.6],[10,152.0],[15,153.9],[25,156.4],[50,161.2],[75,166.1],[85,168.6],[90,170.4],[95,172.5]]
 };
 const AVG = { male:178, female:165 };
-const sexEl = document.getElementById('sex');
+const genderEl = document.getElementById('gender');
+const avgMaleEl = document.getElementById('avgMale');
+const avgFemaleEl = document.getElementById('avgFemale');
 const ageEl = document.getElementById('age');
 const rangeEl = document.getElementById('ageRange');
 const heightEl = document.getElementById('height');
 rangeEl.addEventListener('input', () => { ageEl.value = rangeEl.value; calculate(); });
 ageEl.addEventListener('input', () => { rangeEl.value = Math.max(7, Math.min(16, Number(ageEl.value) || 7)); calculate(); });
-sexEl.addEventListener('change', calculate);
+genderEl.addEventListener('change', calculate);
 heightEl.addEventListener('input', calculate);
 document.getElementById('calc').addEventListener('click', calculate);
 function fmt(n, digits=1) { return n.toFixed(digits).replace('.', ','); }
@@ -185,8 +203,8 @@ function interpolate(rows, age) {
     if (age >= x1 && age <= x2) return y1 + (age-x1)*(y2-y1)/(x2-x1);
   }
 }
-function percentile(height, sex) {
-  const rows = ADULT_REF[sex];
+function percentile(height, gender) {
+  const rows = ADULT_REF[gender];
   if (height < rows[0][1]) return { value: 5, bound: '<' };
   if (height > rows[rows.length-1][1]) return { value: 95, bound: '>' };
   for (let i=0;i<rows.length-1;i++) {
@@ -199,29 +217,37 @@ function percentile(height, sex) {
   return { value:50, bound:'' };
 }
 function calculate() {
-  const sex = sexEl.value;
+  const gender = genderEl.value;
   let age = Number(ageEl.value);
   const height = Number(heightEl.value);
+  const avgMale = Number(avgMaleEl.value);
+  const avgFemale = Number(avgFemaleEl.value);
   const err = document.getElementById('heightError');
   if (!Number.isFinite(age)) age = 15;
   age = Math.max(7, Math.min(16, age));
   rangeEl.value = age;
   if (!Number.isFinite(height) || height < 80 || height > 230) { err.hidden=false; return; }
   err.hidden=true;
-  const reached = interpolate(AHP[sex], age);
+  if (!Number.isFinite(avgMale) || avgMale < 100 || avgMale > 230 ||
+      !Number.isFinite(avgFemale) || avgFemale < 100 || avgFemale > 230) {
+    return;
+  }
+  AVG.male = avgMale;
+  AVG.female = avgFemale;
+  const reached = interpolate(AHP[gender], age);
   const adult = height / (reached/100);
   const remainingCm = adult - height;
   const remainingPct = 100 - reached;
-  const perc = percentile(adult, sex);
+  const perc = percentile(adult, gender);
   const pText = perc.bound === '<' ? `<${perc.value}-го` : perc.bound === '>' ? `>${perc.value}-го` : `≈${Math.round(perc.value)}-й`;
-  const sexName = sex === 'male' ? 'Мальчик' : 'Девочка';
-  const avg = AVG[sex];
-  document.getElementById('averageText').textContent = `${avg} см — ${sex === 'male' ? 'мужчины' : 'женщины'}`;
-  document.getElementById('summary').textContent = `${sexName}, ${fmt(age, age % 1 ? 1 : 0)} лет, ${fmt(height)} см`;
+  const genderName = gender === 'male' ? 'Мальчик' : 'Девочка';
+  const avg = AVG[gender];
+  document.getElementById('averageText').textContent = `${avg} см — ${gender === 'male' ? 'мужчины' : 'женщины'}`;
+  document.getElementById('summary').textContent = `${genderName}, ${fmt(age, age % 1 ? 1 : 0)} лет, ${fmt(height)} см`;
   document.getElementById('pctReached').textContent = `${fmt(reached)}%`;
   document.getElementById('adultHeight').textContent = `${fmt(adult)} см`;
   document.getElementById('percentile').textContent = `${pText}`;
-  document.getElementById('rSex').textContent = sexName;
+  document.getElementById('rgender').textContent = genderName;
   document.getElementById('rAge').textContent = `${fmt(age, age % 1 ? 1 : 0)} лет`;
   document.getElementById('rHeight').textContent = `${fmt(height)} см`;
   document.getElementById('rReached').textContent = `${fmt(reached)}%`;
@@ -233,7 +259,7 @@ function calculate() {
     ? `Прогноз ниже 5-го перцентиля используемой референсной выборки.`
     : perc.bound === '>'
       ? `Прогноз выше 95-го перцентиля используемой референсной выборки.`
-      : `Примерно ${Math.round(low)}% взрослых ${sex === 'male' ? 'мужчин' : 'женщин'} в используемой референсной выборке ниже этого роста, а примерно ${Math.round(100-low)}% — выше.`;
+      : `В США или в России   ~${Math.round(100-low)}%  взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${Math.round(low)}% - ниже.`;
 }
 calculate();
 </script>
