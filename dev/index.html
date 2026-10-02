@@ -122,42 +122,64 @@
         <button id="calc">Рассчитать</button>
       </section>
 
-      <section class="card results">
-        <div class="result-head">
+     <section class="card results" style="
+    display: grid;
+    grid-template-areas:
+        &quot;result-head result-head result-head&quot;
+        &quot;. hero hero&quot;
+        &quot;table-wrap table-wrap table-wrap&quot;
+        &quot;percentil percentil percentil&quot;
+        &quot;source source source&quot;;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 742px;
+    padding: 20px;
+">
+        <div class="result-head" style="
+    grid-area:  result-head;
+">
           <div>
             <div class="result-title">Результат</div>
-            <div id="summary" class="small">Мальчик, 15 лет, 165 см</div>
+            <div id="summary" class="small">Мальчик, 14,6 лет, 165,0 см</div>
           </div>
           <div class="badge">TW3 2012</div>
         </div>
-        <div></div>
-        <div class="hero">
-          <div class="metric"><div class="k">Уже достигнуто</div><div id="pctReached" class="v">96,5%</div></div>
-          <div class="metric"><div class="k">Прогноз взрослого роста</div><div id="adultHeight" class="v">171,0 см</div></div>
+        
+        <div class="hero" style="
+    grid-area: hero;
+">
+          <div class="metric"><div class="k">Уже достигнуто</div><div id="pctReached" class="v">95,1%</div></div>
+          <div class="metric"><div class="k">Прогноз взрослого роста</div><div id="adultHeight" class="v">173,4 см</div></div>
           <div class="metric">
             <div class="k">Перцентиль взрослого роста</div>
             <div class="k">(если ребёнок отстаёт по росту)</div>
     
-            <div id="percentile" class="v">≈30-й</div></div>
+            <div id="percentile" class="v">≈41-й</div></div>
         </div>
-        <div></div>
-        <div class="table-wrap">
+        
+        <div class="table-wrap" style="
+    grid-area:  table-wrap;
+">
           <table>
             <thead><tr><th>Пол</th><th>Возраст</th><th>Рост</th><th>Уже достигнуто</th><th>Осталось вырасти</th><th>Прогноз взрослого роста</th><th>Перцентиль взрослого роста</th></tr></thead>
             <tbody><tr>
-              <td id="rgender">Мальчик</td><td id="rAge">15 лет</td><td id="rHeight">165 см</td><td id="rReached">96,5%</td>
-              <td id="rRemaining"><strong class="highlight">6,0 см / 3,5%</strong></td><td id="rAdult"><strong class="highlight">171,0 см</strong></td><td id="rPercentile"><strong class="highlight">≈30-й перцентиль</strong></td>
+              <td id="rgender">Мальчик</td><td id="rAge">14,6 лет</td><td id="rHeight">165,0 см</td><td id="rReached">95,1%</td>
+              <td id="rRemaining"><strong class="highlight">8,4 см / 4,9%</strong></td><td id="rAdult"><strong class="highlight">173,4 см</strong></td><td id="rPercentile"><strong class="highlight">≈41-й перцентиль</strong></td>
             </tr></tbody>
           </table>
         </div>
 
-        <div class="section">
+        <div class="section" style="
+    grid-area: percentil;
+">
           <h2>Что означает перцентиль</h2>
-          <div id="percentileText" class="note">Примерно 30% мужчин в используемой взрослой референсной выборке ниже этого роста, а примерно 70% — выше.</div>
-          <div id="growthHormoneAdvice" class="advice" hidden></div>
+          <div id="percentileText" class="note">В США или в России ~59% взрослых мужчин выше этого роста, а ~41% — ниже.</div>
+          <div id="growthHormoneAdvice" class="advice percentileWarning">Прогноз взрослого роста (173,4 см) на 4,6 см ниже среднего роста мужчин (178,0 см).
+      Сайт рекомендует посетить детского эндокринолога и обсудить, есть ли медицинские показания к лечению, в том числе гормоном роста.</div>
         </div>
 
-        <div class="source">
+        <div class="source" style="
+    grid-area: source;
+">
           <div class="note"><strong>Источники методики:</strong> 
             таблица IV
             <a href="https://www.researchgate.net/publication/333539082_Comparacion_de_Tres_Metodologias_para_Estimar_el_Porcentaje_de_Estatura_Adulta_en_Ninos_y_Ninas_de_7_a_16_Anos" target="_blank">
@@ -174,6 +196,8 @@
 
         </div>
       </section>
+
+
     </div>
   </main>
 </div>

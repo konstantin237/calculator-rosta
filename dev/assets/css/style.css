@@ -38,7 +38,7 @@ z-index:3
 font-size:13px;white-space:nowrap;z-index:4;text-align:center;line-height:1.25}
 .person b .heightValue{display:block;font-size:12px;font-weight:400;color:#aeb9d0;margin-top:2px}.person small{display:none} 
 
-.results {display:grid;grid-template-columns:1fr;
+.results {display:grid;grid-template-columns:1fr 1fr;
   
   gap:12px;margin-top:14px}
   
@@ -96,7 +96,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .refbox strong { display: block; margin-bottom: 5px; }
 button { width: 100%; border: 0; border-radius: 11px; height: 46px; background: var(--accent); color: white; font-weight: 800; font-size: 15px; cursor: pointer; }
 button:hover { filter: brightness(1.06); }
-.results { padding: 22px; }
+.results {     padding: 22px 0; }
 .result-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
 .result-title { font-size: 18px; font-weight: 800; margin: 0 0 5px; }
 .badge { white-space: nowrap; padding: 7px 10px; border-radius: 999px; background: var(--accent2); color: var(--accent); font-size: 12px; font-weight: 800; }
