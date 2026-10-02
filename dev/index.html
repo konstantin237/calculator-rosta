@@ -25,7 +25,25 @@
   <div class="lead">Введите рост папы и мамы. 
     </br>
     </br>
-    Сайт рассчитывает предполагаемый рост сына и дочери по формуле Джона Хокера — прямо на ростомере.</div></header><div class="layout"><section class="card"><h2>Родители</h2><label>Рост папы, см</label><input id="dad" type="number" min="70" max="250" value="185"><label>Рост мамы, см</label><input id="mom" type="number" min="70" max="250" value="145"><button onclick="calculateParents()">Рассчитать</button><div class="formula"><b>Формула Джона Хокера</b><br><br><b>Сын</b><br>(рост матери + рост отца) : 2 + 6,4<br><br><b>Дочь</b><br>(рост матери + рост отца) : 2 − 6,4</div><div class="note" style="margin-top:12px;background:#2a2030">
+    Сайт рассчитывает предполагаемый рост сына и дочери по формуле Джона Хокера — прямо на ростомере.
+  </div>
+  </header>
+    
+    <div class="layout">
+      
+      <section class="card">
+      
+      <h2>Родители</h2>
+      
+      <label>Рост папы, см</label>
+      
+      <input id="dad" type="number" min="70" max="250" value="185" oninput="calculateParents()">
+
+      <label>Рост мамы, см</label>
+      
+      <input id="mom" type="number" min="70" max="250" value="145" oninput="calculateParents()">
+      
+      <button onclick="calculateParents()">Рассчитать</button><div class="formula"><b>Формула Джона Хокера</b><br><br><b>Сын</b><br>(рост матери + рост отца) : 2 + 6,4<br><br><b>Дочь</b><br>(рост матери + рост отца) : 2 − 6,4</div><div class="note" style="margin-top:12px;background:#2a2030">
 <b>Почему это важно:</b> здесь специально используется более осторожный сценарий: сначала смотрим на рост-максимум ребёнка и сравниваем его со средним ростом людей его пола. Если даже максимум заметно ниже среднего, это повод обратиться к детскому эндокринологу и обсудить, есть ли медицинские показания к лечению, в том числе гормоном роста.
 </div>
 
@@ -140,7 +158,20 @@
         </div>
 
         <div class="source">
-          <div class="note"><strong>Источники методики:</strong> таблица IV статьи Flores-Olivares и соавт. (2019), показатель TW3 2012. Она содержит процент взрослого роста по возрасту и полу для 7–16 лет. Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023 и линейно интерполируется между указанными в источнике перцентилями.</div>
+          <div class="note"><strong>Источники методики:</strong> 
+            таблица IV
+            <a href="https://www.researchgate.net/publication/333539082_Comparacion_de_Tres_Metodologias_para_Estimar_el_Porcentaje_de_Estatura_Adulta_en_Ninos_y_Ninas_de_7_a_16_Anos" target="_blank">
+               статьи  Flores-Olivares и соавт. 
+            </a> 
+                       
+            (2019), показатель TW3 2012. 
+            Она содержит процент взрослого роста по возрасту и полу для 7–16 лет.
+             Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023 
+             и линейно интерполируется между указанными в источнике перцентилями.
+            
+            
+            </div>
+
         </div>
       </section>
     </div>

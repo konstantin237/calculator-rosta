@@ -1,6 +1,8 @@
 function calculateParents(){
     const dad=+document.getElementById('dad').value;
     const mom=+document.getElementById('mom').value;
+
+
     if(!dad||!mom)return;
 
     // Формула Джона Хокера.html.
@@ -160,10 +162,10 @@ function calculateParents(){
     // Поэтому диапазон дочери рисуем в левой зоне,
     // а диапазон сына — в правой зоне.
     const rangeMarkers = [
-        ['Дочь — минимум', daughterMinHeight, 'daughterMin', 'daughter'],
-        ['Дочь — максимум', daughterMaxHeight, 'daughterMax', 'daughter'],
-        ['Сын — минимум', sonMinHeight, 'sonMin', 'son'],
-        ['Сын — максимум', sonMaxHeight, 'sonMax', 'son']
+        ['Минимум', daughterMinHeight, 'daughterMin', 'daughter'],
+        ['Максимум', daughterMaxHeight, 'daughterMax', 'daughter'],
+        ['Минимум', sonMinHeight, 'sonMin', 'son'],
+        ['Максимум', sonMaxHeight, 'sonMax', 'son']
     ];
 
     const rangeMarkerHtml = rangeMarkers.map(([label, height, type, side]) => {
