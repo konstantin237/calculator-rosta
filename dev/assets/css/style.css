@@ -246,3 +246,20 @@ h1, h2, h3, strong, .v {
         grid-template-columns: 1fr;
     }
 }
+
+
+header h1 {
+    margin-bottom: 14px;
+}
+
+header .lead {
+    line-height: 1.5;
+}
+
+header .lead br {
+    display: none;
+}
+
+.lead-second {
+    margin-top: 8px;
+}
