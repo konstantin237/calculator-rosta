@@ -53,6 +53,7 @@ function calculateParents(){
        Именно эти координаты потом используются для фигур.
        Отдельной шкалы для фигур НЕТ.
     */
+
     const rulerCoords={};
     let ticks='';
 
@@ -77,6 +78,7 @@ function calculateParents(){
        Это именно та координата, которую потом используем
        для постановки линии роста.
     */
+
     ruler.querySelectorAll('.tick').forEach(el=>{
         const h=Number(el.dataset.height);
 
@@ -104,6 +106,7 @@ function calculateParents(){
 
        Это специально НЕ является пропорциональной интерполяцией.
     */
+
     function growthLineY(height){
         const roundedHeight=Math.round(height);
 
@@ -143,7 +146,7 @@ function calculateParents(){
     // Голова должна занимать примерно 19 см по высоте.
     // Больший диаметр овала расположен вертикально.
     // Меньший диаметр = 45% от большего.
-    //
+
     // Высота ростомера H соответствует диапазону hi-lo сантиметров,
     // поэтому 19 см переводим в реальные пиксели этого ростомера.
     const headHeightCm=19;
@@ -213,13 +216,27 @@ const AHP = {
   ]
 };
 
+
 // CDC/NHANES US adults 20+ (2021–2023): percentile -> cm.
 const ADULT_REF = {
   male: [[5,162.2],[10,165.2],[15,167.5],[25,170.0],[50,175.2],[75,180.1],[85,183.0],[90,184.8],[95,187.2]],
   female: [[5,149.6],[10,152.0],[15,153.9],[25,156.4],[50,161.2],[75,166.1],[85,168.6],[90,170.4],[95,172.5]]
 };
 
-const AVG = { male:178, female:165 };
+
+// ================================================================
+// ПОСТОЯННЫЕ СПРАВОЧНЫЕ ЗНАЧЕНИЯ
+// ================================================================
+// Эти значения относятся именно к блоку:
+// «Средний рост (В США или в России)»
+//
+// Они НЕ должны изменяться при вводе пользователем
+// своих значений среднего роста.
+const AVG = {
+  male: 178,
+  female: 165
+};
+
 
 const genderEl = document.getElementById('gender');
 const avgMaleEl = document.getElementById('avgMale');
@@ -228,18 +245,25 @@ const ageEl = document.getElementById('age');
 const rangeEl = document.getElementById('ageRange');
 const heightEl = document.getElementById('height');
 
+
 rangeEl.addEventListener('input', () => {
   ageEl.value = rangeEl.value;
   calculateGrowth();
 });
+
 
 ageEl.addEventListener('input', () => {
   rangeEl.value = Math.max(7, Math.min(16, Number(ageEl.value) || 7));
   calculateGrowth();
 });
 
+
 genderEl.addEventListener('change', calculateGrowth);
 heightEl.addEventListener('input', calculateGrowth);
+
+avgMaleEl.addEventListener('input', calculateGrowth);
+avgFemaleEl.addEventListener('input', calculateGrowth);
+
 document.getElementById('calc').addEventListener('click', calculateGrowth);
 
 
@@ -285,8 +309,11 @@ function calculateGrowth() {
   const gender = genderEl.value;
   let age = Number(ageEl.value);
   const height = Number(heightEl.value);
+
+  // Значения, которые пользователь ввёл в поля:
   const avgMale = Number(avgMaleEl.value);
   const avgFemale = Number(avgFemaleEl.value);
+
   const err = document.getElementById('heightError');
 
   if (!Number.isFinite(age)) age = 15;
@@ -306,8 +333,17 @@ function calculateGrowth() {
     return;
   }
 
-  AVG.male = avgMale;
-  AVG.female = avgFemale;
+  // ================================================================
+  // ВАЖНО:
+  // avgMale и avgFemale — пользовательские значения для расчёта.
+  //
+  // Мы НЕ делаем:
+  // AVG.male = avgMale;
+  // AVG.female = avgFemale;
+  //
+  // Поэтому постоянные значения 178 и 165
+  // никогда не изменяются.
+  // ================================================================
 
   const reached = interpolate(AHP[gender], age);
   const adult = height / (reached/100);
@@ -323,7 +359,10 @@ function calculateGrowth() {
         : `≈${Math.round(perc.value)}-й`;
 
   const genderName = gender === 'male' ? 'Мальчик' : 'Девочка';
-  const avg = AVG[gender];
+
+  // Средний рост, введённый пользователем, используется
+  // только для расчёта текущего результата.
+  const avg = gender === 'male' ? avgMale : avgFemale;
 
   // ================================================================
   // ЛОГИКА ОТОБРАЖЕНИЯ ИНФОРМАЦИИ
@@ -348,8 +387,18 @@ function calculateGrowth() {
   const needsGrowthHormoneDiscussion =
     deficitFromAverage >= 2;
 
-  document.getElementById('averageText').textContent =
-    `${avg} см — ${gender === 'male' ? 'мужчины' : 'женщины'}`;
+  // ================================================================
+  // ВАЖНО:
+  // Справочный блок «Средний рост (В США или в России)»
+  // здесь НЕ изменяется.
+  //
+  // В HTML постоянно указано:
+  // 178 см — мужчины
+  // 165 см — женщины
+  //
+  // Эти значения не зависят от введённых пользователем
+  // значений avgMale и avgFemale.
+  // ================================================================
 
   document.getElementById('summary').textContent =
     `${genderName}, ${fmt(age, age % 1 ? 1 : 0)} лет, ${fmt(height)} см`;
@@ -436,6 +485,7 @@ function calculateGrowth() {
   growthHormoneAdvice.textContent = '';
   growthHormoneAdvice.classList.remove('percentileWarning');
 
+
   // ================================================================
   // СЛУЧАЙ 1:
   // Прогноз ниже среднего на 2 см или больше.
@@ -505,6 +555,7 @@ function calculateGrowth() {
     growthHormoneAdvice.textContent = '';
 
   }
+
 
   // ================================================================
   // СЛУЧАЙ 3:
