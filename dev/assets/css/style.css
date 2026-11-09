@@ -263,3 +263,9 @@ header .lead br {
 .lead-second {
     margin-top: 8px;
 }
+
+/* Responsive BEM additions */
+.prediction{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px}
+.prediction__controls{width:100%}
+.prediction__results{width:100%;min-width:0}
+@media(max-width:1100px){.prediction{grid-template-columns:1fr}}
