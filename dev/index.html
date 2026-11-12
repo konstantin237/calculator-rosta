@@ -1,192 +1,419 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="ru">
 <head>
-    
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Определитель роста</title>
-
-<link rel="stylesheet" href="assets/css/style.css">
-
+<link href="assets/css/style.css" rel="stylesheet"/>
 </head>
-
 <body>
-
-
-  <div class="site-layout">
-
+<div class="site-layout">
 <!-- прогноз и перцентиль.html - див -->
-
 <div id="app">
-  <main class="prediction-section">
-    <header>
-      <div class="eyebrow">Калькулятор роста</div>
-      <h1>Прогноз взрослого роста ребёнка</h1>
-      <p class="lead">Расчёт использует процент взрослого роста из таблицы TW3 2012 для возраста 7–16 лет. Введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.</p>
-    </header>
-
-    <div class="prediction">
-      <section class="card prediction__controls">
-        <div class="field">
-          <label for="gender">Пол</label>
-          <select id="gender">
-            <option value="male">Мальчик</option>
-            <option value="female">Девочка</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="age">Возраст, лет, месяцев</label>
-          <label for="">(введите сколько ЛЕТ и МЕСЯЦЕВ)</label>
-
-          <div class="age age-hint" style="    display: block;
-    font-size: 13px;
-    font-weight: 750;
-    margin-bottom: 8px;">
+<main class="prediction">
+<header class="prediction__header">
+<div class="prediction__eyebrow">Калькулятор роста</div>
+<h1 class="prediction__title">Прогноз взрослого роста ребёнка</h1>
+<p class="prediction__lead">Расчёт использует процент взрослого роста из таблицы TW3 2012 для возраста 7–16 лет. Введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.</p>
+</header>
+<div class="prediction__layout">
+<section class="prediction__card prediction__controls">
+<div class="prediction__field">
+<label class="prediction__label" for="gender">Пол</label>
+<select class="prediction__select" id="gender">
+<option value="male">Мальчик</option>
+<option value="female">Девочка</option>
+</select>
+</div>
+<div class="prediction__field">
+<label class="prediction__label" for="age">Возраст, лет, месяцев</label>
+<label class="prediction__label" for="">(введите сколько ЛЕТ и МЕСЯЦЕВ)</label>
+<div class="prediction__age-hint">
             Лучше укажите костный возраст. Его можно определить по рентгену кисти у эндокринолога.
           </div>
-
-          <div class="age-row">
-            <input id="ageRange" type="range" min="7" max="16" step="0.1" value="15.1">
-            <input id="age" type="number" min="7" max="16" step="0.1" value="15.1">
-          </div>
-
-        </div>
-
-          <!--          <div class="small" style="margin-top:7px">Для дробного возраста проценты интерполируются между соседними возрастами таблицы.</div>
+<div class="prediction__age-inputs">
+<input class="prediction__input prediction__input_range" id="ageRange" max="16" min="7" step="0.1" type="range" value="15.1"/>
+<input class="prediction__input prediction__input_number" id="age" max="16" min="7" step="0.1" type="number" value="15.1"/>
+</div>
+</div>
+<!--          <div class="small" style="margin-top:7px">Для дробного возраста проценты интерполируются между соседними возрастами таблицы.</div>
         
         
         </div> -->
-
-        <div class="field">
-          <label for="height">Текущий рост, см</label>
-          <input id="height" type="number" min="80" max="230" step="0.1" value="164">
-          <div id="heightError" class="error" hidden>Введите рост от 80 до 230 см.</div>
-        </div>
-        <hr>
-        <div class="field">
-          <label for="avgMale">Средний рост мужчин, см</label>
-          <input id="avgMale" type="number" min="100" max="230" step="0.1" value="178">
-        </div>
-
-        <div class="field">
-          <label for="avgFemale">Средний рост женщин, см</label>
-          <input id="avgFemale" type="number" min="100" max="230" step="0.1" value="164">
-        </div>
-
-        <div class="refbox">
-          <strong>Средний рост (В США <br> или в России)</strong>
-          <div id="averageText">178 см — мужчины</div>
-          <div id="averageText">165 см — женщины</div>
-          <br/>
-          <div class="small">
-            <p style="display:none;"> 
+<div class="prediction__field">
+<label class="prediction__label" for="height">Текущий рост, см</label>
+<input class="prediction__input prediction__input_number" id="height" max="230" min="80" step="0.1" type="number" value="163"/>
+<div class="prediction__error" hidden="" id="heightError">Введите рост от 80 до 230 см.</div>
+</div>
+<hr class="prediction__divider"/>
+<div class="prediction__field">
+<label class="prediction__label" for="avgMale">Средний рост мужчин, см</label>
+<input class="prediction__input prediction__input_number" id="avgMale" max="230" min="100" step="0.1" type="number" value="178"/>
+</div>
+<div class="prediction__field">
+<label class="prediction__label" for="avgFemale">Средний рост женщин, см</label>
+<input class="prediction__input prediction__input_number" id="avgFemale" max="230" min="100" step="0.1" type="number" value="164"/>
+</div>
+<div class="prediction__reference">
+<strong class="prediction__strong">Средний рост <br/> (В США  или в России)</strong>
+<br/>
+<div id="averageText">178 см — мужчины</div>
+<br/>
+<div id="averageText">165 см — женщины</div>
+<div class="prediction__small">
+<p style="display: none;"> 
             Если Вы в другой стране, 
             то Вы можете узнать в интернете 
             - какой средний рост мужчин 
             и женщин в Вашей стране, и ввести эти значения.
             </p>
-
-            <br/>  <br/>
+<br/> <br/>
             После нажатия «Рассчитать» сайт использует новые значения.</div>
+</div>
+<button class="prediction__button" id="calc">Рассчитать</button>
+</section>
+<section class="prediction__card prediction__results">
+<div class="prediction__result-head">
+<div>
+<div class="prediction__result-title">Результат</div>
+<div class="prediction__small" id="summary">Мальчик, 14,6 лет, 165,0 см</div>
+</div>
+<div class="prediction__badge">TW3 2012</div>
+</div>
+<div class="prediction__hero">
+<div class="prediction__metric"><div class="prediction__metric-label">Уже достигнуто</div><div class="prediction__metric-value" id="pctReached">95,1%</div></div>
+<div class="prediction__metric"><div class="prediction__metric-label">Прогноз взрослого роста</div><div class="prediction__metric-value" id="adultHeight">173,4 см</div></div>
+<div class="prediction__metric">
+<div class="prediction__metric-label">Перцентиль взрослого роста</div>
+<div class="prediction__metric-label">(если ребёнок отстаёт по росту)</div>
+<div class="prediction__metric-value" id="percentile">≈41-й</div></div>
+</div>
+<div class="prediction__table-wrap">
+<table class="prediction__table">
+<thead><tr><th class="prediction__table-cell">Пол</th>
+<th class="prediction__table-cell">Возраст</th>
+<th class="prediction__table-cell">Рост</th>
+<th class="prediction__table-cell">Уже достигнуто</th>
 
-        </div>
-        <button id="calc">Рассчитать</button>
-      </section>
+<th class="prediction__table-cell">Осталось вырасти</th>
 
-     <section class="card results prediction__results" style="
-    display: grid;
-    grid-template-areas:
-        &quot;result-head result-head result-head&quot;
-        &quot;hero hero hero&quot;
-        &quot;table-wrap table-wrap table-wrap&quot;
-        &quot;percentil percentil percentil&quot;
-        &quot;source source source&quot;;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: 742px;
-    padding: 20px;
-">
-        <div class="result-head" style="
-    grid-area:  result-head;
-">
-          <div>
-            <div class="result-title">Результат</div>
-            <div id="summary" class="small">Мальчик, 14,6 лет, 165,0 см</div>
-          </div>
-          <div class="badge">TW3 2012</div>
-        </div>
-        
-        <div class="hero" style="
-    grid-area: hero;
-">
-          <div class="metric"><div class="k">Уже достигнуто</div><div id="pctReached" class="v">95,1%</div></div>
-          <div class="metric"><div class="k">Прогноз взрослого роста</div><div id="adultHeight" class="v">173,4 см</div></div>
-          <div class="metric">
-            <div class="k">Перцентиль взрослого роста</div>
-            <div class="k">(если ребёнок отстаёт по росту)</div>
-    
-            <div id="percentile" class="v">≈41-й</div></div>
-        </div>
-        
-        <div class="table-wrap" style="
-    grid-area:  table-wrap;
-">
-          <table>
-            <thead><tr><th>Пол</th>
-              
-              <th>Возраст</th>
-              
-              <th>Рост</th>
-              
-              <th>Уже достигнуто</th><th>Осталось вырасти</th><th>Прогноз взрослого роста</th><th>Перцентиль взрослого роста</th></tr></thead>
-            <tbody><tr>
-              <td id="rgender">Мальчик</td><td id="rAge">14,6 лет</td><td id="rHeight">165,0 см</td><td id="rReached">95,1%</td>
-              <td id="rRemaining"><strong class="highlight">8,4 см / 4,9%</strong></td><td id="rAdult"><strong class="highlight">173,4 см</strong></td><td id="rPercentile"><strong class="highlight">≈41-й перцентиль</strong></td>
-            </tr></tbody>
-          </table>
-        </div>
+<th class="prediction__table-cell">Прогноз взрослого роста</th>
 
-        <div class="section" style="
-    grid-area: percentil;
-">
-          <h2>Что означает перцентиль</h2>
-          <div id="percentileText" class="note">В США или в России ~59% взрослых мужчин выше этого роста, а ~41% — ниже.</div>
-          <div id="growthHormoneAdvice" class="advice percentileWarning">Прогноз взрослого роста (173,4 см) на 4,6 см ниже среднего роста мужчин (178,0 см).
-      Сайт рекомендует посетить детского эндокринолога и обсудить, есть ли медицинские показания к лечению, в том числе гормоном роста.</div>
-        </div>
+<th class="prediction__table-cell">Перцентиль взрослого роста</th>
 
-        <div class="source" style="
-    grid-area: source;
-">
-          <div class="note"><strong>Источники методики:</strong> 
+</tr>
+
+</thead>
+
+
+<tbody>
+
+<tr>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rgender">Мальчик</td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rAge"></td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rHeight"></td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rReached"></td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rRemaining">
+      
+      <strong class="prediction__highlight">8,4 см / 4,9%</strong>
+</td>
+      
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rAdult">
+
+<strong class="prediction__highlight">173,4 см</strong>
+      
+</td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rPercentile">
+      <strong class="prediction__highlight"> ≈41-й перцентиль </strong>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="prediction__section">
+<h2 class="prediction__section-title">Что означает перцентиль</h2>
+<div class="prediction__note" id="percentileText">В США или в России ~59% взрослых мужчин выше этого роста, а ~41% — ниже.</div>
+<div class="prediction__advice prediction__advice_warning" id="growthHormoneAdvice">Прогноз взрослого роста (173,4 см) на 4,6 см ниже среднего роста мужчин (178,0 см).
+      Сайт рекомендует - назначение Гормона Роста (у эндокринолога).</div>
+</div>
+<div class="prediction__source">
+<div class="prediction__note">
+      
+      <strong class="prediction__strong">Источники методики:</strong> 
+
+      <br>
             таблица IV
-            <a href="https://www.researchgate.net/publication/333539082_Comparacion_de_Tres_Metodologias_para_Estimar_el_Porcentaje_de_Estatura_Adulta_en_Ninos_y_Ninas_de_7_a_16_Anos" target="_blank">
+            <a class="prediction__source-link" href="https://www.researchgate.net/publication/333539082_Comparacion_de_Tres_Metodologias_para_Estimar_el_Porcentaje_de_Estatura_Adulta_en_Ninos_y_Ninas_de_7_a_16_Anos" target="_blank">
                статьи  Flores-Olivares и соавт. 
             </a> 
                        
-            (2019), показатель TW3 2012. 
-            Она содержит процент взрослого роста по возрасту и полу для 7–16 лет.
-             Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023 
+            (2019), показатель TW3 2012. <br> 
+
+            <br>
+
+            В таблице написано - в каком возрасте - какой процент - от будущего взрослого роста - уже достигнут. <br>
+            <br>
+             Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023  <br>
              и линейно интерполируется между указанными в источнике перцентилями.
             
             
             </div>
+</div>
+</section>
+</div>
 
-        </div>
-      </section>
 
+<section class="research-tables" aria-labelledby="research-tables-title">
 
+  <div class="research-tables__header">
+    <h2 class="research-tables__title" id="research-tables-title">
+      Научные исследования и исходные данные
+    </h2>
+    <p class="research-tables__description">
+      Процент достигнутого взрослого роста в зависимости от возраста и пола.
+      Все значения указаны в процентах (%).
+    </p>
+  </div>
+
+  <!-- ПОЛНАЯ ТАБЛИЦА -->
+  <section class="research-tables__section">
+    <h3 class="research-tables__subtitle">
+      Полная сравнительная таблица
+    </h3>
+    <p class="research-tables__text">
+      Сравнение четырёх методик определения процента взрослого роста.
+    </p>
+
+    <div class="research-tables__scroll">
+      <table class="research-tables__table">
+        <caption class="research-tables__caption">
+          Таблица IV. Процент взрослого роста в зависимости от возраста и пола
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Пол</th>
+            <th scope="col">Возраст</th>
+            <th scope="col">BP 1952</th>
+            <th scope="col">TW 1965</th>
+            <th scope="col">RWT 1983</th>
+            <th scope="col">TW3 2012</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="rowgroup" rowspan="10">Мужской</th><td>7 лет</td><td>69,1%</td><td>69,0%</td><td>69,2%</td><td>69,4%</td></tr>
+          <tr><td>8 лет</td><td>72,4%</td><td>72,2%</td><td>72,5%</td><td>72,6%</td></tr>
+          <tr><td>9 лет</td><td>75,6%</td><td>75,4%</td><td>75,6%</td><td>75,6%</td></tr>
+          <tr><td>10 лет</td><td>78,4%</td><td>78,3%</td><td>78,6%</td><td>78,4%</td></tr>
+          <tr><td>11 лет</td><td>81,3%</td><td>81,3%</td><td>81,6%</td><td>80,8%</td></tr>
+          <tr><td>12 лет</td><td>84,0%</td><td>84,1%</td><td>84,9%</td><td>84,5%</td></tr>
+          <tr><td>13 лет</td><td>87,3%</td><td>87,1%</td><td>88,7%</td><td>88,2%</td></tr>
+          <tr><td>14 лет</td><td>91,0%</td><td>92,0%</td><td>92,7%</td><td>93,1%</td></tr>
+          <tr><td>15 лет</td><td>94,6%</td><td>96,6%</td><td>96,0%</td><td>96,5%</td></tr>
+          <tr><td>16 лет</td><td>97,1%</td><td>98,8%</td><td class="research-tables__missing">—</td><td>98,1%</td></tr>
+
+          <tr><th scope="rowgroup" rowspan="10">Женский</th><td>7 лет</td><td>74,3%</td><td>73,6%</td><td>74,0%</td><td>74,2%</td></tr>
+          <tr><td>8 лет</td><td>77,6%</td><td>77,1%</td><td>77,7%</td><td>77,9%</td></tr>
+          <tr><td>9 лет</td><td>81,2%</td><td>80,5%</td><td>81,0%</td><td>81,2%</td></tr>
+          <tr><td>10 лет</td><td>84,8%</td><td>83,8%</td><td>84,5%</td><td>85,4%</td></tr>
+          <tr><td>11 лет</td><td>88,7%</td><td>87,3%</td><td>88,1%</td><td>88,8%</td></tr>
+          <tr><td>12 лет</td><td>92,6%</td><td>92,2%</td><td>92,0%</td><td>92,0%</td></tr>
+          <tr><td>13 лет</td><td>96,0%</td><td>96,7%</td><td>95,4%</td><td>96,2%</td></tr>
+          <tr><td>14 лет</td><td>98,3%</td><td>98,9%</td><td class="research-tables__missing">—</td><td>98,0%</td></tr>
+          <tr><td>15 лет</td><td>99,3%</td><td>99,8%</td><td class="research-tables__missing">—</td><td>99,0%</td></tr>
+          <tr><td>16 лет</td><td>99,6%</td><td>100,0%</td><td class="research-tables__missing">—</td><td>99,2%</td></tr>
+        </tbody>
+      </table>
     </div>
-  </main>
+  </section>
+
+
+  <!-- BP 1952 -->
+  <section class="research-tables__section">
+    <h3 class="research-tables__subtitle">
+      BP 1952 — Bayley &amp; Pinneau
+    </h3>
+    <div class="research-tables__scroll">
+      <table class="research-tables__table research-tables__table_compact">
+        <caption class="research-tables__caption">
+          Процент взрослого роста по методике BP 1952
+        </caption>
+        <thead>
+          <tr><th scope="col">Возраст</th><th scope="col">Мужской пол</th><th scope="col">Женский пол</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">7 лет</th><td>69,1%</td><td>74,3%</td></tr>
+          <tr><th scope="row">8 лет</th><td>72,4%</td><td>77,6%</td></tr>
+          <tr><th scope="row">9 лет</th><td>75,6%</td><td>81,2%</td></tr>
+          <tr><th scope="row">10 лет</th><td>78,4%</td><td>84,8%</td></tr>
+          <tr><th scope="row">11 лет</th><td>81,3%</td><td>88,7%</td></tr>
+          <tr><th scope="row">12 лет</th><td>84,0%</td><td>92,6%</td></tr>
+          <tr><th scope="row">13 лет</th><td>87,3%</td><td>96,0%</td></tr>
+          <tr><th scope="row">14 лет</th><td>91,0%</td><td>98,3%</td></tr>
+          <tr><th scope="row">15 лет</th><td>94,6%</td><td>99,3%</td></tr>
+          <tr><th scope="row">16 лет</th><td>97,1%</td><td>99,6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="research-tables__note">
+      Источник данных: продольное исследование Berkeley Growth Study children.
+    </p>
+  </section>
+
+
+  <!-- TW 1965 -->
+  <section class="research-tables__section">
+    <h3 class="research-tables__subtitle">
+      TW 1965 — Tanner et al.
+    </h3>
+    <div class="research-tables__scroll">
+      <table class="research-tables__table research-tables__table_compact">
+        <caption class="research-tables__caption">
+          Процент взрослого роста по методике TW 1965
+        </caption>
+        <thead>
+          <tr><th scope="col">Возраст</th><th scope="col">Мужской пол</th><th scope="col">Женский пол</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">7 лет</th><td>69,0%</td><td>73,6%</td></tr>
+          <tr><th scope="row">8 лет</th><td>72,2%</td><td>77,1%</td></tr>
+          <tr><th scope="row">9 лет</th><td>75,4%</td><td>80,5%</td></tr>
+          <tr><th scope="row">10 лет</th><td>78,3%</td><td>83,8%</td></tr>
+          <tr><th scope="row">11 лет</th><td>81,3%</td><td>87,3%</td></tr>
+          <tr><th scope="row">12 лет</th><td>84,1%</td><td>92,2%</td></tr>
+          <tr><th scope="row">13 лет</th><td>87,1%</td><td>96,7%</td></tr>
+          <tr><th scope="row">14 лет</th><td>92,0%</td><td>98,9%</td></tr>
+          <tr><th scope="row">15 лет</th><td>96,6%</td><td>99,8%</td></tr>
+          <tr><th scope="row">16 лет</th><td>98,8%</td><td>100,0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="research-tables__note">
+      Источник данных: продольное исследование Child Study Centre in London.
+    </p>
+  </section>
+
+
+  <!-- RWT 1983 -->
+  <section class="research-tables__section">
+    <h3 class="research-tables__subtitle">
+      RWT 1983 — Roche et al.
+    </h3>
+    <div class="research-tables__scroll">
+      <table class="research-tables__table research-tables__table_compact">
+        <caption class="research-tables__caption">
+          Процент взрослого роста по методике RWT 1983
+        </caption>
+        <thead>
+          <tr><th scope="col">Возраст</th><th scope="col">Мужской пол</th><th scope="col">Женский пол</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">7 лет</th><td>69,2%</td><td>74,0%</td></tr>
+          <tr><th scope="row">8 лет</th><td>72,5%</td><td>77,7%</td></tr>
+          <tr><th scope="row">9 лет</th><td>75,6%</td><td>81,0%</td></tr>
+          <tr><th scope="row">10 лет</th><td>78,6%</td><td>84,5%</td></tr>
+          <tr><th scope="row">11 лет</th><td>81,6%</td><td>88,1%</td></tr>
+          <tr><th scope="row">12 лет</th><td>84,9%</td><td>92,0%</td></tr>
+          <tr><th scope="row">13 лет</th><td>88,7%</td><td>95,4%</td></tr>
+          <tr><th scope="row">14 лет</th><td>92,7%</td><td class="research-tables__missing">—</td></tr>
+          <tr><th scope="row">15 лет</th><td>96,0%</td><td class="research-tables__missing">—</td></tr>
+          <tr><th scope="row">16 лет</th><td class="research-tables__missing">—</td><td class="research-tables__missing">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="research-tables__note">
+      Оценка методом RWT (Wainer et al., 1978).
+    </p>
+  </section>
+
+
+  <!-- TW3 2012 -->
+  <section class="research-tables__section">
+    <h3 class="research-tables__subtitle">
+      TW3 2012 — настоящее исследование
+    </h3>
+    <div class="research-tables__scroll">
+      <table class="research-tables__table research-tables__table_compact">
+        <caption class="research-tables__caption">
+          Процент взрослого роста по методике TW3 2012
+        </caption>
+        <thead>
+          <tr><th scope="col">Возраст</th><th scope="col">Мужской пол</th><th scope="col">Женский пол</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">7 лет</th><td>69,4%</td><td>74,2%</td></tr>
+          <tr><th scope="row">8 лет</th><td>72,6%</td><td>77,9%</td></tr>
+          <tr><th scope="row">9 лет</th><td>75,6%</td><td>81,2%</td></tr>
+          <tr><th scope="row">10 лет</th><td>78,4%</td><td>85,4%</td></tr>
+          <tr><th scope="row">11 лет</th><td>80,8%</td><td>88,8%</td></tr>
+          <tr><th scope="row">12 лет</th><td>84,5%</td><td>92,0%</td></tr>
+          <tr><th scope="row">13 лет</th><td>88,2%</td><td>96,2%</td></tr>
+          <tr><th scope="row">14 лет</th><td>93,1%</td><td>98,0%</td></tr>
+          <tr><th scope="row">15 лет</th><td>96,5%</td><td>99,0%</td></tr>
+          <tr><th scope="row">16 лет</th><td>98,1%</td><td>99,2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="research-tables__note">
+      Результаты настоящего исследования, полученные методом TW3
+      (Tanner et al., 2001).
+    </p>
+  </section>
+
+
+  <!-- ПОЯСНЕНИЯ И ИСТОЧНИК -->
+  <section class="research-tables__section research-tables__references">
+    <h3 class="research-tables__subtitle">Расшифровка методик</h3>
+
+    <ul class="research-tables__list">
+      <li><strong>BP 1952</strong> — Bayley &amp; Pinneau (1952).</li>
+      <li><strong>TW 1965</strong> — Tanner et al. (1965).</li>
+      <li><strong>RWT 1983</strong> — Roche et al. (1983).</li>
+      <li><strong>TW3 2012</strong> — данные настоящего исследования, метод Tanner et al. (2001).</li>
+    </ul>
+
+    <h3 class="research-tables__subtitle">Статистические показатели</h3>
+    <ul class="research-tables__list">
+      <li>Мужской пол: P = 0,993.</li>
+      <li>Женский пол: P = 0,581.</li>
+    </ul>
+
+    <h3 class="research-tables__subtitle">Примечание</h3>
+    <p class="research-tables__note">
+      Прочерк (—) в оригинальной таблице означает отсутствие значения.
+      Такие значения не восстанавливались и не заменялись предположительными числами.
+    </p>
+
+    <h3 class="research-tables__subtitle">Источник</h3>
+    <p class="research-tables__source">
+      Flores Olivares et al., 2019, Int. J. Morphol., 37(2):632–640,
+      страница 636, Tabla IV.
+    </p>
+  </section>
+
+</section>
+
+
+</main>
+</div>
 </div>
 
-</div>
+
+
+
 
 <script src="assets/js/script.js"></script>
-
 </body>
-
-
 </html>
