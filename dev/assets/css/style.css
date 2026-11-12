@@ -331,6 +331,8 @@ body {
   background: #fff4f4 !important;
   color: #a61b1b !important;
   line-height: 1.5;
+
+      white-space: pre-line;
 }
 .prediction__advice[hidden] {
   display: none;
@@ -572,10 +574,14 @@ body {
   border-radius: 12px;
   background: #f0f3f8;
   line-height: 1.5;
+
+      white-space: pre-line;
 }
 .formula__advice h3 {
   margin: 0 0 12px;
   font-size: 17px;
+
+      white-space: pre-line;
 }
 .formula__comparison {
   display: grid;
