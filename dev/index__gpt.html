@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Определитель роста</title>
+<link href="assets/css/style.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="site-layout">
+<!-- прогноз и перцентиль.html - див -->
+<div id="app">
+<main class="prediction">
+<header class="prediction__header">
+<div class="prediction__eyebrow">Калькулятор роста</div>
+<h1 class="prediction__title">Прогноз взрослого роста ребёнка</h1>
+<p class="prediction__lead">Расчёт использует процент взрослого роста из таблицы TW3 2012 для возраста 7–16 лет. Введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.</p>
+</header>
+<div class="prediction__layout">
+<section class="prediction__card prediction__controls">
+<div class="prediction__field">
+<label class="prediction__label" for="gender">Пол</label>
+<select class="prediction__select" id="gender">
+<option value="male">Мальчик</option>
+<option value="female">Девочка</option>
+</select>
+</div>
+<div class="prediction__field">
+<label class="prediction__label" for="age">Возраст, лет, месяцев</label>
+<label class="prediction__label" for="">(введите сколько ЛЕТ и МЕСЯЦЕВ)</label>
+<div class="prediction__age-hint">
+            Лучше укажите костный возраст. Его можно определить по рентгену кисти у эндокринолога.
+          </div>
+<div class="prediction__age-inputs">
+<input class="prediction__input prediction__input_range" id="ageRange" max="16" min="7" step="0.1" type="range" value="15.1"/>
+<input class="prediction__input prediction__input_number" id="age" max="16" min="7" step="0.1" type="number" value="15.1"/>
+</div>
+</div>
+<!--          <div class="small" style="margin-top:7px">Для дробного возраста проценты интерполируются между соседними возрастами таблицы.</div>
+        
+        
+        </div> -->
+<div class="prediction__field">
+<label class="prediction__label" for="height">Текущий рост, см</label>
+<input class="prediction__input prediction__input_number" id="height" max="230" min="80" step="0.1" type="number" value="164"/>
+<div class="prediction__error" hidden="" id="heightError">Введите рост от 80 до 230 см.</div>
+</div>
+<hr class="prediction__divider"/>
+<div class="prediction__field">
+<label class="prediction__label" for="avgMale">Средний рост мужчин, см</label>
+<input class="prediction__input prediction__input_number" id="avgMale" max="230" min="100" step="0.1" type="number" value="178"/>
+</div>
+<div class="prediction__field">
+<label class="prediction__label" for="avgFemale">Средний рост женщин, см</label>
+<input class="prediction__input prediction__input_number" id="avgFemale" max="230" min="100" step="0.1" type="number" value="164"/>
+</div>
+<div class="prediction__reference">
+<strong class="prediction__strong">Средний рост (В США <br/> или в России)</strong>
+<div id="averageText">178 см — мужчины</div>
+<div id="averageText">165 см — женщины</div>
+<br>
+<div class="prediction__small">
+<p style="display: none;"> 
+            Если Вы в другой стране, 
+            то Вы можете узнать в интернете 
+            - какой средний рост мужчин 
+            и женщин в Вашей стране, и ввести эти значения.
+            </p>
+<br/> <br/>
+            После нажатия «Рассчитать» сайт использует новые значения.</div>
+</div>
+<button class="prediction__button" id="calc">Рассчитать</button>
+</section>
+<section class="prediction__card prediction__results">
+<div class="prediction__result-head">
+<div>
+<div class="prediction__result-title">Результат</div>
+<div class="prediction__small" id="summary">Мальчик, 14,6 лет, 165,0 см</div>
+</div>
+<div class="prediction__badge">TW3 2012</div>
+</div>
+<div class="prediction__hero">
+<div class="prediction__metric"><div class="prediction__metric-label">Уже достигнуто</div><div class="prediction__metric-value" id="pctReached">95,1%</div></div>
+<div class="prediction__metric"><div class="prediction__metric-label">Прогноз взрослого роста</div><div class="prediction__metric-value" id="adultHeight">173,4 см</div></div>
+<div class="prediction__metric">
+<div class="prediction__metric-label">Перцентиль взрослого роста</div>
+<div class="prediction__metric-label">(если ребёнок отстаёт по росту)</div>
+<div class="prediction__metric-value" id="percentile">≈41-й</div></div>
+</div>
+<div class="prediction__table-wrap">
+<table class="prediction__table">
+<thead><tr><th class="prediction__table-cell">Пол</th>
+<th class="prediction__table-cell">Возраст</th>
+<th class="prediction__table-cell">Рост</th>
+<th class="prediction__table-cell">Уже достигнуто</th>
+
+<th class="prediction__table-cell">Осталось вырасти</th>
+
+<th class="prediction__table-cell">Прогноз взрослого роста</th>
+
+<th class="prediction__table-cell">Перцентиль взрослого роста</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+<tr>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rgender">Мальчик</td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rAge">14,6 лет</td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rHeight">165,0 см</td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rReached">95,1%</td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rRemaining">
+      
+      <strong class="prediction__highlight">8,4 см / 4,9%</strong>
+</td>
+      
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rAdult">
+
+<strong class="prediction__highlight">173,4 см</strong>
+      
+</td>
+
+<td class="prediction__table-cell    " style="text-wrap: nowrap;" id="rPercentile">
+      <strong class="prediction__highlight"> ≈41-й перцентиль </strong>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="prediction__section">
+<h2 class="prediction__section-title">Что означает перцентиль</h2>
+<div class="prediction__note" id="percentileText">В США или в России ~59% взрослых мужчин выше этого роста, а ~41% — ниже.</div>
+<div class="prediction__advice prediction__advice_warning" id="growthHormoneAdvice">Прогноз взрослого роста (173,4 см) на 4,6 см ниже среднего роста мужчин (178,0 см).
+      Сайт рекомендует посетить детского эндокринолога и обсудить, есть ли медицинские показания к лечению, в том числе гормоном роста.</div>
+</div>
+<div class="prediction__source">
+<div class="prediction__note"><strong class="prediction__strong">Источники методики:</strong> 
+            таблица IV
+            <a class="prediction__source-link" href="https://www.researchgate.net/publication/333539082_Comparacion_de_Tres_Metodologias_para_Estimar_el_Porcentaje_de_Estatura_Adulta_en_Ninos_y_Ninas_de_7_a_16_Anos" target="_blank">
+               статьи  Flores-Olivares и соавт. 
+            </a> 
+                       
+            (2019), показатель TW3 2012. 
+            Она содержит процент взрослого роста по возрасту и полу для 7–16 лет.
+             Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023 
+             и линейно интерполируется между указанными в источнике перцентилями.
+            
+            
+            </div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+<script src="assets/js/script.js"></script>
+</body>
+</html>

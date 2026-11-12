@@ -1,18 +1,25 @@
-
 const AHP = {
   male: [
-    [7,69.4],[8,72.6],[9,75.6],[10,78.4],[11,80.8],[12,84.5],[13,88.2],[14,93.1],[15,96.5],[16,98.1]
+    [7,69.4],[8,72.6],[9,75.6],[10,78.4],[11,80.8],
+    [12,84.5],[13,88.2],[14,93.1],[15,96.5],[16,98.1]
   ],
   female: [
-    [7,74.2],[8,77.9],[9,81.2],[10,85.4],[11,88.8],[12,92.0],[13,96.2],[14,98.0],[15,99.0],[16,99.2]
+    [7,74.2],[8,77.9],[9,81.2],[10,85.4],[11,88.8],
+    [12,92.0],[13,96.2],[14,98.0],[15,99.0],[16,99.2]
   ]
 };
 
 
 // CDC/NHANES US adults 20+ (2021–2023): percentile -> cm.
 const ADULT_REF = {
-  male: [[5,162.2],[10,165.2],[15,167.5],[25,170.0],[50,175.2],[75,180.1],[85,183.0],[90,184.8],[95,187.2]],
-  female: [[5,149.6],[10,152.0],[15,153.9],[25,156.4],[50,161.2],[75,166.1],[85,168.6],[90,170.4],[95,172.5]]
+  male: [
+    [5,162.2],[10,165.2],[15,167.5],[25,170.0],
+    [50,175.2],[75,180.1],[85,183.0],[90,184.8],[95,187.2]
+  ],
+  female: [
+    [5,149.6],[10,152.0],[15,153.9],[25,156.4],
+    [50,161.2],[75,166.1],[85,168.6],[90,170.4],[95,172.5]
+  ]
 };
 
 
@@ -24,6 +31,7 @@ const ADULT_REF = {
 //
 // Они НЕ должны изменяться при вводе пользователем
 // своих значений среднего роста.
+
 const AVG = {
   male: 178,
   female: 165
@@ -43,12 +51,14 @@ rangeEl.addEventListener('input', () => {
 
   console.log(ageEl.value);
   console.log(rangeEl.value);
+
   calculateGrowth();
 });
 
 
 ageEl.addEventListener('input', () => {
   rangeEl.value = Math.max(7, Math.min(16, Number(ageEl.value) || 7));
+
   calculateGrowth();
 });
 
@@ -62,20 +72,24 @@ avgFemaleEl.addEventListener('input', calculateGrowth);
 document.getElementById('calc').addEventListener('click', calculateGrowth);
 
 
-function fmt(n, digits=1) {
+function fmt(n, digits = 1) {
   return n.toFixed(digits).replace('.', ',');
 }
 
 
 function interpolate(rows, age) {
   if (age <= rows[0][0]) return rows[0][1];
-  if (age >= rows[rows.length-1][0]) return rows[rows.length-1][1];
 
-  for (let i=0;i<rows.length-1;i++) {
-    const [x1,y1] = rows[i], [x2,y2] = rows[i+1];
+  if (age >= rows[rows.length - 1][0]) {
+    return rows[rows.length - 1][1];
+  }
+
+  for (let i = 0; i < rows.length - 1; i++) {
+    const [x1, y1] = rows[i];
+    const [x2, y2] = rows[i + 1];
 
     if (age >= x1 && age <= x2) {
-      return y1 + (age-x1)*(y2-y1)/(x2-x1);
+      return y1 + (age - x1) * (y2 - y1) / (x2 - x1);
     }
   }
 }
@@ -84,19 +98,26 @@ function interpolate(rows, age) {
 function percentile(height, gender) {
   const rows = ADULT_REF[gender];
 
-  if (height < rows[0][1]) return { value: 5, bound: '<' };
-  if (height > rows[rows.length-1][1]) return { value: 95, bound: '>' };
+  if (height < rows[0][1]) {
+    return { value: 5, bound: '<' };
+  }
 
-  for (let i=0;i<rows.length-1;i++) {
-    const [p1,h1] = rows[i], [p2,h2] = rows[i+1];
+  if (height > rows[rows.length - 1][1]) {
+    return { value: 95, bound: '>' };
+  }
+
+  for (let i = 0; i < rows.length - 1; i++) {
+    const [p1, h1] = rows[i];
+    const [p2, h2] = rows[i + 1];
 
     if (height >= h1 && height <= h2) {
-      const p = p1 + (height-h1)*(p2-p1)/(h2-h1);
-      return { value:p, bound:'' };
+      const p = p1 + (height - h1) * (p2 - p1) / (h2 - h1);
+
+      return { value: p, bound: '' };
     }
   }
 
-  return { value:50, bound:'' };
+  return { value: 50, bound: '' };
 }
 
 
@@ -111,20 +132,28 @@ function calculateGrowth() {
 
   const err = document.getElementById('heightError');
 
-  if (!Number.isFinite(age)) age = 15;
+  if (!Number.isFinite(age)) {
+    age = 15;
+  }
 
   age = Math.max(7, Math.min(16, age));
   rangeEl.value = age;
 
   if (!Number.isFinite(height) || height < 80 || height > 230) {
-    err.hidden=false;
+    err.hidden = false;
     return;
   }
 
-  err.hidden=true;
+  err.hidden = true;
 
-  if (!Number.isFinite(avgMale) || avgMale < 100 || avgMale > 230 ||
-      !Number.isFinite(avgFemale) || avgFemale < 100 || avgFemale > 230) {
+  if (
+    !Number.isFinite(avgMale) ||
+    avgMale < 100 ||
+    avgMale > 230 ||
+    !Number.isFinite(avgFemale) ||
+    avgFemale < 100 ||
+    avgFemale > 230
+  ) {
     return;
   }
 
@@ -141,7 +170,7 @@ function calculateGrowth() {
   // ================================================================
 
   const reached = interpolate(AHP[gender], age);
-  const adult = height / (reached/100);
+  const adult = height / (reached / 100);
   const remainingCm = adult - height;
   const remainingPct = 100 - reached;
   const perc = percentile(adult, gender);
@@ -157,7 +186,9 @@ function calculateGrowth() {
 
   // Средний рост, введённый пользователем, используется
   // только для расчёта текущего результата.
+
   const avg = gender === 'male' ? avgMale : avgFemale;
+
 
   // ================================================================
   // ЛОГИКА ОТОБРАЖЕНИЯ ИНФОРМАЦИИ
@@ -182,6 +213,7 @@ function calculateGrowth() {
   const needsGrowthHormoneDiscussion =
     deficitFromAverage >= 2;
 
+
   // ================================================================
   // ВАЖНО:
   // Справочный блок «Средний рост (В США или в России)»
@@ -196,7 +228,7 @@ function calculateGrowth() {
   // ================================================================
 
   document.getElementById('summary').textContent =
-    `${genderName}, ${fmt(age, age % 1 ? 1 : 0)} лет, ${fmt(height)} см`;
+    `${genderName}, ${fmt(age, age % 1 ? 1 : 0)}лет, ${fmt(height)} см`;
 
   document.getElementById('pctReached').textContent =
     `${fmt(reached)}%`;
@@ -217,13 +249,14 @@ function calculateGrowth() {
     `${fmt(reached)}%`;
 
   document.getElementById('rRemaining').innerHTML =
-    `<strong class="highlight">${fmt(Math.max(0,remainingCm))} см / ${fmt(remainingPct)}%</strong>`;
+    `<strong class="prediction__highlight">${fmt(Math.max(0, remainingCm))} см / ${fmt(remainingPct)}%</strong>`;
 
   document.getElementById('rAdult').innerHTML =
-    `<strong class="highlight">${fmt(adult)} см</strong>`;
+    `<strong class="prediction__highlight">${fmt(adult)} см</strong>`;
 
 
   // Элементы блока перцентиля и рекомендации.
+
   const percentileMetric =
     document.getElementById('percentile');
 
@@ -231,10 +264,10 @@ function calculateGrowth() {
     document.getElementById('rPercentile').closest('td');
 
   const percentileHeader =
-    document.querySelector('table thead th:last-child');
+    document.querySelector('.prediction__table thead th:last-child');
 
   const percentileSection =
-    document.getElementById('percentileText').closest('.section');
+    document.getElementById('percentileText').closest('.prediction__section');
 
   const percentileText =
     document.getElementById('percentileText');
@@ -255,6 +288,7 @@ function calculateGrowth() {
 
   // В таблице скрываем ячейку и заголовок перцентиля,
   // если прогноз не ниже среднего на 2 см или больше.
+
   percentileCell.hidden =
     !needsGrowthHormoneDiscussion;
 
@@ -264,21 +298,28 @@ function calculateGrowth() {
 
 
   // Раздел «Что означает перцентиль» всегда остаётся видимым.
+
   percentileSection.hidden = false;
 
 
   // Обновляем значение перцентиля.
+
   percentileMetric.textContent =
     `${pText}`;
 
   document.getElementById('rPercentile').innerHTML =
-    `<strong class="highlight">${pText} перцентиль</strong>`;
+    `<strong class="prediction__highlight">${pText} перцентиль</strong>`;
 
 
   // Блок рекомендации всегда остаётся видимым.
+
   growthHormoneAdvice.hidden = false;
   growthHormoneAdvice.textContent = '';
-  growthHormoneAdvice.classList.remove('percentileWarning');
+
+  growthHormoneAdvice.classList.remove(
+    'prediction__advice_warning',
+    'prediction__comparison-result'
+  );
 
 
   // ================================================================
@@ -324,7 +365,10 @@ function calculateGrowth() {
 
     growthHormoneAdvice.hidden = false;
 
-    growthHormoneAdvice.classList.add('percentileWarning', 'comparisonResult');
+    growthHormoneAdvice.classList.add(
+      'prediction__advice_warning',
+      'prediction__comparison-result'
+    );
 
     growthHormoneAdvice.textContent =
       `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
