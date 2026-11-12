@@ -767,3 +767,182 @@ body {
     &__comparison-row { grid-template-columns: 1fr; }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --------------------------------------------------  */
+
+
+.research-tables {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 50px;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+
+  &__header {
+    margin-bottom: 30px;
+  }
+
+  &__title {
+    margin: 0 0 12px;
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  &__description {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  &__section {
+    margin-top: 36px;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  &__subtitle {
+    margin: 0 0 12px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  &__text {
+    margin: 0 0 16px;
+    color: #666;
+  }
+
+  &__scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+  }
+
+  &__table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: center;
+
+    th,
+    td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #e8e8e8;
+      white-space: nowrap;
+    }
+
+    thead {
+      background: #f3f4f6;
+
+      th {
+        font-weight: 700;
+      }
+    }
+
+    tbody {
+      tr:last-child {
+        th,
+        td {
+          border-bottom: 0;
+        }
+      }
+
+      tr:hover {
+        background: #f8f9fb;
+      }
+
+      th {
+        font-weight: 600;
+      }
+    }
+
+    &_compact {
+      min-width: 420px;
+      max-width: 700px;
+    }
+  }
+
+  &__caption {
+    padding: 14px;
+    font-weight: 700;
+    text-align: left;
+    white-space: normal;
+  }
+
+  &__missing {
+    color: #999;
+  }
+
+  &__note {
+    margin: 12px 0 0;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  &__references {
+    padding-top: 24px;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  &__list {
+    margin: 0 0 24px;
+    padding-left: 22px;
+    line-height: 1.8;
+  }
+
+  &__source {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 820px) {
+    margin-top: 30px;
+    padding: 18px;
+
+    &__title {
+      font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 18px;
+    }
+
+    &__table {
+      font-size: 13px;
+
+      th,
+      td {
+        padding: 9px 11px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 14px;
+
+    &__title {
+      font-size: 20px;
+    }
+  }
+}
