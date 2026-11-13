@@ -94,9 +94,9 @@ body {
 
   &__layout {
     display: grid;
-    /*grid-template-columns: 465px 900px;*/
+    grid-template-columns: 465px 900px;
 
-    grid-template-columns: 465px minmax(0, 900px);
+    /* grid-template-columns: 465px minmax(0, 900px);*/
     align-items: start;
     gap: 24px;
 
@@ -797,6 +797,10 @@ body {
   background: #fff;
   border-radius: 12px;
 
+  position: relative;
+  width: 1140px;
+  max-width: none;
+
   &__header {
     margin-bottom: 30px;
   }
@@ -815,6 +819,9 @@ body {
 
   &__section {
     margin-top: 36px;
+
+    position: relative;
+    width: 100%;
 
     &:first-of-type {
       margin-top: 0;
