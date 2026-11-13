@@ -15,7 +15,7 @@
 <header class="prediction__header">
 <div class="prediction__eyebrow">Калькулятор роста</div>
 <h1 class="prediction__title">Прогноз взрослого роста ребёнка</h1>
-<p class="prediction__lead">Расчёт использует процент взрослого роста из таблицы TW3 2012 для возраста 7–16 лет. Введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.</p>
+<p class="prediction__lead">Выберите методику расчёта, затем введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.</p>
 </header>
 <div class="prediction__layout">
 <section class="prediction__card prediction__controls">
@@ -41,6 +41,19 @@
         
         
         </div> -->
+<div class="prediction__field">
+<label class="prediction__label" for="researchMethod">Методика расчёта</label>
+<select class="prediction__select" id="researchMethod">
+<option value="BP1952">BP 1952</option>
+<option value="TW1965">TW 1965</option>
+<option value="RWT1983">RWT 1983</option>
+<option value="TW32012" selected>TW3 2012</option>
+<option value="max">Наибольшее значение</option>
+<option value="min">Наименьшее значение</option>
+<option value="average">Среднее арифметическое</option>
+</select>
+<div class="prediction__error" id="methodError" hidden>Для выбранной методики нет данных для указанного возраста.</div>
+</div>
 <div class="prediction__field">
 <label class="prediction__label" for="height">Текущий рост, см</label>
 <input class="prediction__input prediction__input_number" id="height" max="230" min="80" step="0.1" type="number" value="163"/>
@@ -79,7 +92,7 @@
 <div class="prediction__result-title">Результат</div>
 <div class="prediction__small" id="summary">Мальчик, 14,6 лет, 165,0 см</div>
 </div>
-<div class="prediction__badge">TW3 2012</div>
+<div class="prediction__badge" id="methodBadge">TW3 2012</div>
 </div>
 <div class="prediction__hero">
 <div class="prediction__metric"><div class="prediction__metric-label">Уже достигнуто</div><div class="prediction__metric-value" id="pctReached">95,1%</div></div>
@@ -195,11 +208,11 @@
       Полная сравнительная таблица
     </h3>
     <p class="research-tables__text">
-      Сравнение четырёх методик определения процента взрослого роста.
+      Сравнение четырёх исходных методик и рассчитанных по ним статистических показателей.
     </p>
 
     <div class="research-tables__scroll">
-      <table class="research-tables__table">
+      <table class="research-tables__table research-tables__table_comparison">
         <caption class="research-tables__caption">
           Таблица IV. Процент взрослого роста в зависимости от возраста и пола
         </caption>
@@ -207,42 +220,46 @@
           <tr>
             <th scope="col">Пол</th>
             <th scope="col">Возраст</th>
-            <th scope="col">BP 1952</th>
-            <th scope="col">TW 1965</th>
-            <th scope="col">RWT 1983</th>
-            <th scope="col">TW3 2012</th>
+            <th scope="col" data-method="BP1952">BP 1952</th>
+            <th scope="col" data-method="TW1965">TW 1965</th>
+            <th scope="col" data-method="RWT1983">RWT 1983</th>
+            <th scope="col" data-method="TW32012">TW3 2012</th>
+            <th scope="col" data-method="max">Наибольшее</th>
+            <th scope="col" data-method="min">Наименьшее</th>
+            <th scope="col" data-method="average">Среднее <br>арифметическое</th>
           </tr>
         </thead>
-        <tbody>
-          <tr><th scope="rowgroup" rowspan="10">Мужской</th><td>7 лет</td><td>69,1%</td><td>69,0%</td><td>69,2%</td><td>69,4%</td></tr>
-          <tr><td>8 лет</td><td>72,4%</td><td>72,2%</td><td>72,5%</td><td>72,6%</td></tr>
-          <tr><td>9 лет</td><td>75,6%</td><td>75,4%</td><td>75,6%</td><td>75,6%</td></tr>
-          <tr><td>10 лет</td><td>78,4%</td><td>78,3%</td><td>78,6%</td><td>78,4%</td></tr>
-          <tr><td>11 лет</td><td>81,3%</td><td>81,3%</td><td>81,6%</td><td>80,8%</td></tr>
-          <tr><td>12 лет</td><td>84,0%</td><td>84,1%</td><td>84,9%</td><td>84,5%</td></tr>
-          <tr><td>13 лет</td><td>87,3%</td><td>87,1%</td><td>88,7%</td><td>88,2%</td></tr>
-          <tr><td>14 лет</td><td>91,0%</td><td>92,0%</td><td>92,7%</td><td>93,1%</td></tr>
-          <tr><td>15 лет</td><td>94,6%</td><td>96,6%</td><td>96,0%</td><td>96,5%</td></tr>
-          <tr><td>16 лет</td><td>97,1%</td><td>98,8%</td><td class="research-tables__missing">—</td><td>98,1%</td></tr>
+        <tr data-gender="male" data-age="7"><th scope="rowgroup" rowspan="10">Мужской</th><td>7 лет</td><td>69,1%</td><td>69,0%</td><td>69,2%</td><td>69,4%</td></tr>
+<tr data-gender="male" data-age="8"><td>8 лет</td><td>72,4%</td><td>72,2%</td><td>72,5%</td><td>72,6%</td></tr>
+<tr data-gender="male" data-age="9"><td>9 лет</td><td>75,6%</td><td>75,4%</td><td>75,6%</td><td>75,6%</td></tr>
+<tr data-gender="male" data-age="10"><td>10 лет</td><td>78,4%</td><td>78,3%</td><td>78,6%</td><td>78,4%</td></tr>
+<tr data-gender="male" data-age="11"><td>11 лет</td><td>81,3%</td><td>81,3%</td><td>81,6%</td><td>80,8%</td></tr>
+<tr data-gender="male" data-age="12"><td>12 лет</td><td>84,0%</td><td>84,1%</td><td>84,9%</td><td>84,5%</td></tr>
+<tr data-gender="male" data-age="13"><td>13 лет</td><td>87,3%</td><td>87,1%</td><td>88,7%</td><td>88,2%</td></tr>
+<tr data-gender="male" data-age="14"><td>14 лет</td><td>91,0%</td><td>92,0%</td><td>92,7%</td><td>93,1%</td></tr>
+<tr data-gender="male" data-age="15"><td>15 лет</td><td>94,6%</td><td>96,6%</td><td>96,0%</td><td>96,5%</td></tr>
+<tr data-gender="male" data-age="16"><td>16 лет</td><td>97,1%</td><td>98,8%</td><td class="research-tables__missing">—</td><td>98,1%</td></tr>
 
-          <tr><th scope="rowgroup" rowspan="10">Женский</th><td>7 лет</td><td>74,3%</td><td>73,6%</td><td>74,0%</td><td>74,2%</td></tr>
-          <tr><td>8 лет</td><td>77,6%</td><td>77,1%</td><td>77,7%</td><td>77,9%</td></tr>
-          <tr><td>9 лет</td><td>81,2%</td><td>80,5%</td><td>81,0%</td><td>81,2%</td></tr>
-          <tr><td>10 лет</td><td>84,8%</td><td>83,8%</td><td>84,5%</td><td>85,4%</td></tr>
-          <tr><td>11 лет</td><td>88,7%</td><td>87,3%</td><td>88,1%</td><td>88,8%</td></tr>
-          <tr><td>12 лет</td><td>92,6%</td><td>92,2%</td><td>92,0%</td><td>92,0%</td></tr>
-          <tr><td>13 лет</td><td>96,0%</td><td>96,7%</td><td>95,4%</td><td>96,2%</td></tr>
-          <tr><td>14 лет</td><td>98,3%</td><td>98,9%</td><td class="research-tables__missing">—</td><td>98,0%</td></tr>
-          <tr><td>15 лет</td><td>99,3%</td><td>99,8%</td><td class="research-tables__missing">—</td><td>99,0%</td></tr>
-          <tr><td>16 лет</td><td>99,6%</td><td>100,0%</td><td class="research-tables__missing">—</td><td>99,2%</td></tr>
-        </tbody>
+<br>
+<br>
+
+<tr data-gender="female" data-age="7"><th scope="rowgroup" rowspan="10">Женский</th><td>7 лет</td><td>74,3%</td><td>73,6%</td><td>74,0%</td><td>74,2%</td></tr>
+<tr data-gender="female" data-age="8"><td>8 лет</td><td>77,6%</td><td>77,1%</td><td>77,7%</td><td>77,9%</td></tr>
+<tr data-gender="female" data-age="9"><td>9 лет</td><td>81,2%</td><td>80,5%</td><td>81,0%</td><td>81,2%</td></tr>
+<tr data-gender="female" data-age="10"><td>10 лет</td><td>84,8%</td><td>83,8%</td><td>84,5%</td><td>85,4%</td></tr>
+<tr data-gender="female" data-age="11"><td>11 лет</td><td>88,7%</td><td>87,3%</td><td>88,1%</td><td>88,8%</td></tr>
+<tr data-gender="female" data-age="12"><td>12 лет</td><td>92,6%</td><td>92,2%</td><td>92,0%</td><td>92,0%</td></tr>
+<tr data-gender="female" data-age="13"><td>13 лет</td><td>96,0%</td><td>96,7%</td><td>95,4%</td><td>96,2%</td></tr>
+<tr data-gender="female" data-age="14"><td>14 лет</td><td>98,3%</td><td>98,9%</td><td class="research-tables__missing">—</td><td>98,0%</td></tr>
+<tr data-gender="female" data-age="15"><td>15 лет</td><td>99,3%</td><td>99,8%</td><td class="research-tables__missing">—</td><td>99,0%</td></tr>
+<tr data-gender="female" data-age="16"><td>16 лет</td><td>99,6%</td><td>100,0%</td><td class="research-tables__missing">—</td><td>99,2%</td></tr></tbody>
       </table>
     </div>
   </section>
 
 
   <!-- BP 1952 -->
-  <section class="research-tables__section">
+  <section class="research-tables__section research-tables__section_hidden" style="display:none;" >
     <h3 class="research-tables__subtitle">
       BP 1952 — Bayley &amp; Pinneau
     </h3>
@@ -275,7 +292,7 @@
 
 
   <!-- TW 1965 -->
-  <section class="research-tables__section">
+  <section class="research-tables__section research-tables__section_hidden" style="display:none;" >
     <h3 class="research-tables__subtitle">
       TW 1965 — Tanner et al.
     </h3>
@@ -308,7 +325,7 @@
 
 
   <!-- RWT 1983 -->
-  <section class="research-tables__section">
+  <section class="research-tables__section research-tables__section_hidden" style="display:none;" >
     <h3 class="research-tables__subtitle">
       RWT 1983 — Roche et al.
     </h3>
@@ -341,7 +358,7 @@
 
 
   <!-- TW3 2012 -->
-  <section class="research-tables__section">
+  <section class="research-tables__section research-tables__section_hidden" style="display:none;" >
     <h3 class="research-tables__subtitle">
       TW3 2012 — настоящее исследование
     </h3>

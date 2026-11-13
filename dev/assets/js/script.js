@@ -1,61 +1,86 @@
 let AHP;
 
-
-// TW3 2012
-/*
-AHP = {
-  male: [
-    [7,69.4],[8,72.6],[9,75.6],[10,78.4],[11,80.8],
-    [12,84.5],[13,88.2],[14,93.1],[15,96.5],[16,98.1]
-  ],
-  female: [
-    [7,74.2],[8,77.9],[9,81.2],[10,85.4],[11,88.8],
-    [12,92.0],[13,96.2],[14,98.0],[15,99.0],[16,99.2]
-  ]
-};*/
-
-
-// 1965
-/*
-AHP = {
-  male: [
-    [7,69.0],[8,72.2],[9,75.4],[10,78.3],[11,81.3],
-    [12,84.1],[13,87.1],[14,92.0],[15,96.6],[16,98.8]
-  ],
-  female: [
-    [7,73.6],[8,77.1],[9,80.5],[10,83.8],[11,87.3],
-    [12,92.2],[13,96.7],[14,98.9],[15,99.8],[16,100.0]
-  ]
-};*/
-
-// наибольшее
-
-
-AHP = {
-  male: [
-    [7,69.4],[8,72.6],[9,75.6],[10,78.4],[11,81.3],
-    [12,84.5],[13,88.2],[14,93.1],[15,96.6],[16,98.8]
-  ],
-  female: [
-    [7,74.2],[8,77.9],[9,81.2],[10,85.4],[11,88.8],
-    [12,92.2],[13,96.7],[14,98.9],[15,99.8],[16,100.0]
-  ]
+const AHP_DATA = {
+  BP1952: {
+    male: [[7,69.1],[8,72.4],[9,75.6],[10,78.4],[11,81.3],[12,84.0],[13,87.3],[14,91.0],[15,94.6],[16,97.1]],
+    female: [[7,74.3],[8,77.6],[9,81.2],[10,84.8],[11,88.7],[12,92.6],[13,96.0],[14,98.3],[15,99.3],[16,99.6]]
+  },
+  TW1965: {
+    male: [[7,69.0],[8,72.2],[9,75.4],[10,78.3],[11,81.3],[12,84.1],[13,87.1],[14,92.0],[15,96.6],[16,98.8]],
+    female: [[7,73.6],[8,77.1],[9,80.5],[10,83.8],[11,87.3],[12,92.2],[13,96.7],[14,98.9],[15,99.8],[16,100.0]]
+  },
+  RWT1983: {
+    male: [[7,69.2],[8,72.5],[9,75.6],[10,78.6],[11,81.6],[12,84.9],[13,88.7],[14,92.7],[15,96.0]],
+    female: [[7,74.0],[8,77.7],[9,81.0],[10,84.5],[11,88.1],[12,92.0],[13,95.4]]
+  },
+  TW32012: {
+    male: [[7,69.4],[8,72.6],[9,75.6],[10,78.4],[11,80.8],[12,84.5],[13,88.2],[14,93.1],[15,96.5],[16,98.1]],
+    female: [[7,74.2],[8,77.9],[9,81.2],[10,85.4],[11,88.8],[12,92.0],[13,96.2],[14,98.0],[15,99.0],[16,99.2]]
+  }
 };
 
+const METHOD_LABELS = {
+  BP1952: 'BP 1952', TW1965: 'TW 1965', RWT1983: 'RWT 1983',
+  TW32012: 'TW3 2012', max: 'Наибольшее значение',
+  min: 'Наименьшее значение', average: 'Среднее арифметическое'
+};
 
-// наименьшее
-/*
-AHP = {
-  male: [
-    [7,69.0],[8,72.2],[9,75.4],[10,78.3],[11,80.8],
-    [12,84.1],[13,87.1],[14,92.0],[15,96.5],[16,98.1]
-  ],
-  female: [
-    [7,73.6],[8,77.1],[9,80.5],[10,83.8],[11,87.3],
-    [12,92.0],[13,96.2],[14,98.0],[15,99.0],[16,99.2]
-  ]
-}; */
+function getValue(rows, age) {
+  const item = rows.find(([rowAge]) => rowAge === age);
+  return item ? item[1] : null;
+}
 
+function calculateAHPStatistics(type) {
+  const result = { male: [], female: [] };
+  for (const gender of ['male', 'female']) {
+    for (let age = 7; age <= 16; age++) {
+      const values = Object.keys(AHP_DATA)
+        .map(method => getValue(AHP_DATA[method][gender], age))
+        .filter(value => value !== null);
+      if (!values.length) continue;
+      const value = type === 'max' ? Math.max(...values)
+        : type === 'min' ? Math.min(...values)
+        : values.reduce((sum, item) => sum + item, 0) / values.length;
+      result[gender].push([age, value]);
+    }
+  }
+  return result;
+}
+
+function getAHP(type) {
+  return AHP_DATA[type] || calculateAHPStatistics(type);
+}
+
+function methodsColumnIndex(method) {
+  return ({BP1952:3,TW1965:4,RWT1983:5,TW32012:6,max:7,min:8,average:9})[method];
+}
+
+function renderResearchTable() {
+  const table = document.querySelector('.research-tables__table:not(.research-tables__table_compact)');
+  if (!table) return;
+  ['max','min','average'].forEach(type => {
+    table.querySelectorAll('tbody tr[data-gender][data-age]').forEach(row => {
+      const value = getValue(getAHP(type)[row.dataset.gender], Number(row.dataset.age));
+      const cell = document.createElement('td');
+      cell.textContent = value === null ? '—' : `${fmt(value)}%`;
+      row.appendChild(cell);
+    });
+  });
+}
+
+function highlightResearchColumn(method) {
+  const table = document.querySelector('.research-tables__table:not(.research-tables__table_compact)');
+  if (!table) return;
+  table.querySelectorAll('[data-method]').forEach(cell => {
+    cell.classList.toggle('research-tables__cell_active', cell.dataset.method === method);
+  });
+  const column = methodsColumnIndex(method);
+  table.querySelectorAll('tbody tr[data-gender][data-age]').forEach(row => {
+    row.querySelectorAll('td').forEach((cell, index) => {
+      cell.classList.toggle('research-tables__cell_active', index + 2 === column);
+    });
+  });
+}
 
 // CDC/NHANES US adults 20+ (2021–2023): percentile -> cm.
 const ADULT_REF = {
@@ -91,6 +116,7 @@ const avgFemaleEl = document.getElementById('avgFemale');
 const ageEl = document.getElementById('age');
 const rangeEl = document.getElementById('ageRange');
 const heightEl = document.getElementById('height');
+const researchMethodEl = document.getElementById('researchMethod');
 
 
 rangeEl.addEventListener('input', () => {
@@ -111,6 +137,7 @@ ageEl.addEventListener('input', () => {
 
 
 genderEl.addEventListener('change', calculateGrowth);
+researchMethodEl.addEventListener('change', calculateGrowth);
 heightEl.addEventListener('input', calculateGrowth);
 
 avgMaleEl.addEventListener('input', calculateGrowth);
@@ -127,7 +154,11 @@ function fmt(n, digits = 1) {
 function interpolate(rows, age) {
   if (age <= rows[0][0]) return rows[0][1];
 
-  if (age >= rows[rows.length - 1][0]) {
+  if (age > rows[rows.length - 1][0]) {
+    return null;
+  }
+
+  if (age === rows[rows.length - 1][0]) {
     return rows[rows.length - 1][1];
   }
 
@@ -170,6 +201,8 @@ function percentile(height, gender) {
 
 function calculateGrowth() {
   const gender = genderEl.value;
+  const selectedMethod = researchMethodEl.value;
+  AHP = getAHP(selectedMethod);
   let age = Number(ageEl.value);
   const height = Number(heightEl.value);
 
@@ -217,6 +250,15 @@ function calculateGrowth() {
   // ================================================================
 
   const reached = interpolate(AHP[gender], age);
+  const methodError = document.getElementById('methodError');
+
+  if (reached === null) {
+    methodError.hidden = false;
+    return;
+  }
+
+  methodError.hidden = true;
+
   const adult = height / (reached / 100);
   const remainingCm = adult - height;
   const remainingPct = 100 - reached;
@@ -273,6 +315,9 @@ function calculateGrowth() {
   // Эти значения не зависят от введённых пользователем
   // значений avgMale и avgFemale.
   // ================================================================
+
+  document.getElementById('methodBadge').textContent = METHOD_LABELS[selectedMethod];
+  highlightResearchColumn(selectedMethod);
 
   document.getElementById('summary').textContent =
     `${genderName}, ${fmt(age, age % 1 ? 1 : 0)}лет, ${fmt(height)} см`;
@@ -463,6 +508,5 @@ function calculateGrowth() {
   }
 
 }
-
-
+renderResearchTable();
 calculateGrowth();

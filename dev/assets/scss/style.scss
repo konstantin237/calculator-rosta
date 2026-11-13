@@ -951,3 +951,25 @@ body {
     }
   }
 }
+
+/* Выделение выбранного метода в сравнительной таблице */
+.research-tables {
+  &__section {
+    &_hidden { display: none; }
+  }
+
+  &__table {
+    &_comparison {
+      min-width: 1050px;
+    }
+  }
+
+  &__cell {
+    &_active {
+      background: #eaf0ff !important;
+      color: #2148c7 !important;
+      font-weight: 800;
+      box-shadow: inset 0 0 0 1px rgba(49, 94, 251, .18);
+    }
+  }
+}
