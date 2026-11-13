@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
   color-scheme: light dark;
   --bg: light-dark(#f5f7fb, #101319);
@@ -31,7 +32,6 @@ body {
 .site-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-
   align-items: start;
   gap: 20px;
   width: 100%;
@@ -88,14 +88,22 @@ body {
 }
 .prediction__layout {
   display: grid;
-
-  grid-template-columns: 465px 900px;
+  /*grid-template-columns: 465px 900px;*/
+  grid-template-columns: 465px minmax(0, 900px);
   align-items: start;
-  gap: 20px;
-}
-@media (max-width: 1100px) {
-  .prediction__layout {
+  gap: 24px;
+  /*@media (max-width: 1100px) {
     grid-template-columns: 1fr;
+  }*/
+}
+@media (max-width: 1400px) {
+  .prediction__layout {
+    grid-template-columns: minmax(300px, 465px) minmax(0, 1fr);
+  }
+}
+@media (max-width: 820px) {
+  .prediction__layout {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 .prediction__card {
@@ -107,8 +115,6 @@ body {
   box-shadow: var(--shadow);
 }
 .prediction__controls {
-
-  top: 18px;
   width: 100%;
   padding: 22px;
 }
@@ -287,8 +293,6 @@ body {
   border-bottom: 1px solid #dce2eb;
   text-align: left;
   color: #172033 !important;
-
-
 }
 .prediction__table-cell:last-child {
   border-bottom: 0;
@@ -331,8 +335,7 @@ body {
   background: #fff4f4 !important;
   color: #a61b1b !important;
   line-height: 1.5;
-
-      white-space: pre-line;
+  white-space: pre-line;
 }
 .prediction__advice[hidden] {
   display: none;
@@ -574,14 +577,11 @@ body {
   border-radius: 12px;
   background: #f0f3f8;
   line-height: 1.5;
-
-      white-space: pre-line;
+  white-space: pre-line;
 }
 .formula__advice h3 {
   margin: 0 0 12px;
   font-size: 17px;
-
-      white-space: pre-line;
 }
 .formula__comparison {
   display: grid;
@@ -699,14 +699,7 @@ body {
   }
 }
 
-
-
-
-
-
-
-/* ------------------------------------------------  */
-
+/* --------------------------------------------------  */
 .research-tables {
   width: 100%;
   max-width: 100%;
@@ -839,4 +832,18 @@ body {
   .research-tables__title {
     font-size: 20px;
   }
+}
+
+/* Выделение выбранного метода в сравнительной таблице */
+.research-tables__section_hidden {
+  display: none;
+}
+.research-tables__table_comparison {
+  min-width: 1050px;
+}
+.research-tables__cell_active {
+  background: #eaf0ff !important;
+  color: #2148c7 !important;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 1px rgba(49, 94, 251, 0.18);
 }
