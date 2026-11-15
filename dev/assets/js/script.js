@@ -462,10 +462,21 @@ function calculateGrowth() {
       'prediction__comparison-result'
     );
 
-    growthHormoneAdvice.textContent =
-  `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
     
-   Сайт рекомендует - назначение Гормона Роста (у эндокринолога)`;
+    growthHormoneAdvice.innerHTML =
+      `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
+
+      Сайт рекомендует:
+      
+      назначение Гормона Роста (у эндокринолога).
+
+      И / ИЛИ
+
+      Вы можете увеличить выработку естественного Гормона Роста с помощью аргинина 
+      (так сказал профессор В. А. Дадали:
+      Видео 1:    <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/WtgT5QQbVIM">https://www.youtube.com/shorts/WtgT5QQbVIM</a>
+      Видео 2:    <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/K2xThz5-5cM"> https://www.youtube.com/shorts/K2xThz5-5cM</a>       
+       )`;
 
   }
 
