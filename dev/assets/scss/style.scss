@@ -298,6 +298,10 @@ body {
     padding: 15px;
     border-radius: 14px;
     background: #f0f3f8 !important;
+
+        display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   &__metric-label {

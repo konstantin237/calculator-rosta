@@ -376,17 +376,17 @@ const remainingRange = isRange
       ? `<${perc.value}-го`
       : perc.bound === '>'
         ? `>${perc.value}-го`
-        : `≈${Math.round(perc.value)}-й`;
+        : `≈${Math.round(perc.value)}-й `;
 
 const formatPercentile = value =>
   value.bound === '<'
     ? `<${value.value}-го`
     : value.bound === '>'
       ? `>${value.value}-го`
-      : `≈${Math.round(value.value)}-й`;
+      : `≈${Math.round(value.value)}-й `;
 
 const pTextRange = isRange
-  ? `${formatPercentile(percentile(adultRange.min, gender))} – ${formatPercentile(percentile(adultRange.max, gender))}`
+  ? `${formatPercentile(percentile(adultRange.min, gender))}   –   ${formatPercentile(percentile(adultRange.max, gender))}`
   : pText;
 
 
