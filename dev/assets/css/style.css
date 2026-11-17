@@ -326,6 +326,8 @@ body {
   color: #667085 !important;
   font-size: 12px;
   line-height: 1.55;
+
+  white-space: pre-line;
 }
 .prediction__advice {
   margin-top: 10px;

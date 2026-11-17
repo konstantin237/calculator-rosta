@@ -44,10 +44,15 @@
 <div class="prediction__field">
 <label class="prediction__label" for="researchMethod">Методика расчёта</label>
 <select class="prediction__select" id="researchMethod">
+<option value="range" selected>Разброс методик</option>
+
 <option value="BP1952">BP 1952</option>
 <option value="TW1965">TW 1965</option>
 <option value="RWT1983">RWT 1983</option>
-<option value="TW32012" selected>TW3 2012</option>
+<option value="TW32012">TW3 2012</option>
+
+
+
 <option value="max">Наибольшее значение</option>
 <option value="min">Наименьшее значение</option>
 <option value="average">Среднее арифметическое</option>
@@ -235,6 +240,7 @@
           <tr>
             <th scope="col">Пол</th>
             <th scope="col">Возраст</th>
+            <th scope="col" data-method="range">Разброс методик</th>
             <th scope="col" data-method="BP1952">BP 1952</th>
             <th scope="col" data-method="TW1965">TW 1965</th>
             <th scope="col" data-method="RWT1983">RWT 1983</th>

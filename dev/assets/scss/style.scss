@@ -375,6 +375,8 @@ body {
     color: #667085 !important;
     font-size: 12px;
     line-height: 1.55;
+
+    white-space: pre-line;
   }
 
   &__advice {
@@ -978,5 +980,13 @@ body {
       font-weight: 800;
       box-shadow: inset 0 0 0 1px rgba(49, 94, 251, .18);
     }
+
+  &_range {
+    background: #f0f4ff;
+    font-weight: 700;
+    white-space: nowrap;
   }
+}
+
+
 }

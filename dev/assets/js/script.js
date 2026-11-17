@@ -20,14 +20,32 @@ const AHP_DATA = {
 };
 
 const METHOD_LABELS = {
-  BP1952: 'BP 1952', TW1965: 'TW 1965', RWT1983: 'RWT 1983',
-  TW32012: 'TW3 2012', max: 'Наибольшее значение',
-  min: 'Наименьшее значение', average: 'Среднее арифметическое'
+  BP1952: 'BP 1952',
+  TW1965: 'TW 1965',
+  RWT1983: 'RWT 1983',
+  TW32012: 'TW3 2012',
+  range: 'Разброс методик',
+  max: 'Наибольшее значение',
+  min: 'Наименьшее значение',
+  average: 'Среднее арифметическое'
 };
 
 function getValue(rows, age) {
   const item = rows.find(([rowAge]) => rowAge === age);
   return item ? item[1] : null;
+}
+
+function getAHPRange(gender, age) {
+  const values = Object.keys(AHP_DATA)
+    .map(method => interpolate(AHP_DATA[method][gender], age))
+    .filter(value => value !== null && value !== undefined);
+
+  if (!values.length) return null;
+
+  return {
+    min: Math.min(...values),
+    max: Math.max(...values)
+  };
 }
 
 function calculateAHPStatistics(type) {
@@ -52,17 +70,65 @@ function getAHP(type) {
 }
 
 function methodsColumnIndex(method) {
-  return ({BP1952:3,TW1965:4,RWT1983:5,TW32012:6,max:7,min:8,average:9})[method];
+  return ({
+    range: 3,
+    BP1952: 4,
+    TW1965: 5,
+    RWT1983: 6,
+    TW32012: 7,
+    max: 8,
+    min: 9,
+    average: 10
+  })[method];
 }
 
+
 function renderResearchTable() {
-  const table = document.querySelector('.research-tables__table:not(.research-tables__table_compact)');
+  const table = document.querySelector(
+    '.research-tables__table:not(.research-tables__table_compact)'
+  );
+
   if (!table) return;
-  ['max','min','average'].forEach(type => {
+
+  // Столбец с разбросом четырёх методик.
+  table.querySelectorAll('tbody tr[data-gender][data-age]').forEach(row => {
+    const ageCell = row.querySelector('td');
+
+    if (!ageCell || row.querySelector('.research-tables__cell_range')) {
+      return;
+    }
+
+    const gender = row.dataset.gender;
+    const age = Number(row.dataset.age);
+
+    const values = Object.keys(AHP_DATA)
+      .map(method => getValue(AHP_DATA[method][gender], age))
+      .filter(value => value !== null);
+
+    const cell = document.createElement('td');
+
+    cell.className =
+      'research-tables__cell research-tables__cell_range';
+
+    cell.textContent = values.length
+      ? `${fmt(Math.min(...values))}–${fmt(Math.max(...values))}%`
+      : '—';
+
+    ageCell.after(cell);
+  });
+
+  // Статистические столбцы.
+  ['max', 'min', 'average'].forEach(type => {
     table.querySelectorAll('tbody tr[data-gender][data-age]').forEach(row => {
-      const value = getValue(getAHP(type)[row.dataset.gender], Number(row.dataset.age));
+      const value = getValue(
+        getAHP(type)[row.dataset.gender],
+        Number(row.dataset.age)
+      );
+
       const cell = document.createElement('td');
+
       cell.textContent = value === null ? '—' : `${fmt(value)}%`;
+
       row.appendChild(cell);
     });
   });
@@ -200,10 +266,17 @@ function percentile(height, gender) {
 
 
 function calculateGrowth() {
+
+
   const gender = genderEl.value;
   const selectedMethod = researchMethodEl.value;
-  AHP = getAHP(selectedMethod);
+  const isRange = selectedMethod === 'range';
+
+  AHP = isRange ? null : getAHP(selectedMethod);
+
   let age = Number(ageEl.value);
+
+
   const height = Number(heightEl.value);
 
   // Значения, которые пользователь ввёл в поля:
@@ -249,20 +322,54 @@ function calculateGrowth() {
   // никогда не изменяются.
   // ================================================================
 
-  const reached = interpolate(AHP[gender], age);
-  const methodError = document.getElementById('methodError');
 
-  if (reached === null) {
-    methodError.hidden = false;
-    return;
-  }
+const rangeValues = isRange
+  ? getAHPRange(gender, age)
+  : null;
+
+const reached = isRange
+  ? (rangeValues ? (rangeValues.min + rangeValues.max) / 2 : null)
+  : interpolate(AHP[gender], age);
+
+const methodError = document.getElementById('methodError');
+
+if (reached === null) {
+  methodError.hidden = false;
+  return;
+}
+
 
   methodError.hidden = true;
 
-  const adult = height / (reached / 100);
-  const remainingCm = adult - height;
-  const remainingPct = 100 - reached;
-  const perc = percentile(adult, gender);
+
+const adultRange = isRange
+  ? {
+      min: height / (rangeValues.max / 100),
+      max: height / (rangeValues.min / 100)
+    }
+  : null;
+
+// Для существующей логики рекомендаций используем середину интервала.
+const adult = isRange
+  ? (adultRange.min + adultRange.max) / 2
+  : height / (reached / 100);
+
+const remainingCm = adult - height;
+const remainingPct = 100 - reached;
+
+const perc = percentile(adult, gender);
+
+// Интервалы оставшегося роста.
+const remainingRange = isRange
+  ? {
+      min: Math.max(0, adultRange.min - height),
+      max: Math.max(0, adultRange.max - height),
+      pctMin: 100 - rangeValues.max,
+      pctMax: 100 - rangeValues.min
+    }
+  : null;
+
+
 
   const pText =
     perc.bound === '<'
@@ -270,6 +377,18 @@ function calculateGrowth() {
       : perc.bound === '>'
         ? `>${perc.value}-го`
         : `≈${Math.round(perc.value)}-й`;
+
+const formatPercentile = value =>
+  value.bound === '<'
+    ? `<${value.value}-го`
+    : value.bound === '>'
+      ? `>${value.value}-го`
+      : `≈${Math.round(value.value)}-й`;
+
+const pTextRange = isRange
+  ? `${formatPercentile(percentile(adultRange.min, gender))} – ${formatPercentile(percentile(adultRange.max, gender))}`
+  : pText;
+
 
   const genderName = gender === 'male' ? 'Мальчик' : 'Девочка';
 
@@ -322,11 +441,15 @@ function calculateGrowth() {
   document.getElementById('summary').textContent =
     `${genderName}, ${fmt(age, age % 1 ? 1 : 0)}лет, ${fmt(height)} см`;
 
-  document.getElementById('pctReached').textContent =
-    `${fmt(reached)}%`;
+    
+document.getElementById('pctReached').textContent = isRange
+  ? `${fmt(rangeValues.min)}–${fmt(rangeValues.max)}%`
+  : `${fmt(reached)}%`;
 
-  document.getElementById('adultHeight').textContent =
-    `${fmt(adult)} см`;
+document.getElementById('adultHeight').textContent = isRange
+  ? `${fmt(adultRange.min)}–${fmt(adultRange.max)} см`
+  : `${fmt(adult)} см`;
+  
 
   document.getElementById('rgender').textContent =
     genderName;
@@ -337,16 +460,23 @@ function calculateGrowth() {
   document.getElementById('rHeight').textContent =
     `${fmt(height)} см`;
 
-  document.getElementById('rReached').textContent =
-    `${fmt(reached)}%`;
-
-  document.getElementById('rRemaining').innerHTML =
-    `<strong class="prediction__highlight">${fmt(Math.max(0, remainingCm))} см / ${fmt(remainingPct)}%</strong>`;
-
-  document.getElementById('rAdult').innerHTML =
-    `<strong class="prediction__highlight">${fmt(adult)} см</strong>`;
 
 
+document.getElementById('rReached').textContent = isRange
+  ? `${fmt(rangeValues.min)}–${fmt(rangeValues.max)}%`
+  : `${fmt(reached)}%`;
+
+document.getElementById('rRemaining').innerHTML = isRange
+  ? `<strong class="prediction__highlight">${fmt(remainingRange.min)}–${fmt(remainingRange.max)} см / ${fmt(remainingRange.pctMin)}–${fmt(remainingRange.pctMax)}%</strong>`
+  : `<strong class="prediction__highlight">${fmt(Math.max(0, remainingCm))} см / ${fmt(remainingPct)}%</strong>`;
+
+document.getElementById('rAdult').innerHTML = isRange
+  ? `<strong class="prediction__highlight">${fmt(adultRange.min)}–${fmt(adultRange.max)} см</strong>`
+  : `<strong class="prediction__highlight">${fmt(adult)} см</strong>`;
+
+
+
+    
   // Элементы блока перцентиля и рекомендации.
 
   const percentileMetric =
@@ -396,13 +526,15 @@ function calculateGrowth() {
 
   // Обновляем значение перцентиля.
 
-  percentileMetric.textContent =
-    `${pText}`;
+percentileMetric.textContent = isRange
+  ? pTextRange
+  : pText;
 
-  document.getElementById('rPercentile').innerHTML =
-    `<strong class="prediction__highlight">${pText} перцентиль</strong>`;
+document.getElementById('rPercentile').innerHTML = isRange
+  ? `<strong class="prediction__highlight">${pTextRange} перцентиль</strong>`
+  : `<strong class="prediction__highlight">${pText} перцентиль</strong>`;
 
-
+  
   // Блок рекомендации всегда остаётся видимым.
 
   growthHormoneAdvice.hidden = false;
@@ -425,64 +557,80 @@ function calculateGrowth() {
   // - рекомендацию обсудить ситуацию с эндокринологом.
   // ================================================================
 
+
   if (needsGrowthHormoneDiscussion) {
 
-    const low =
-      Math.max(0, Math.min(100, perc.value));
+  const adultsPercentileText = (heightValue, percentileValue) => {
+    const low = Math.max(0, Math.min(100, percentileValue.value));
+    const adultsAbove = Math.round(100 - low);
+    const adultsBelow = Math.round(low);
+    const percentileLabel = formatPercentile(percentileValue);
+    const adults = gender === 'male' ? 'мужчин' : 'женщин';
 
-    const adultsAbove =
-      Math.round(100 - low);
-
-    const adultsBelow =
-      Math.round(low);
-
-
-    if (perc.bound === '<') {
-
-      percentileText.textContent =
-        `Прогноз ниже 5-го перцентиля используемой референсной выборки.`;
-
-    } else if (perc.bound === '>') {
-
-      percentileText.textContent =
-        `Прогноз выше 95-го перцентиля используемой референсной выборки.`;
-
-    } else {
-
-      percentileText.textContent =
-        `В США или в России ~${adultsAbove}% взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${adultsBelow}% — ниже.`;
-
+    if (percentileValue.bound === '<') {
+      return `Прогнозируемый рост ${fmt(heightValue)} см: ниже 5-го перцентиля используемой референсной выборки.`;
     }
 
+    if (percentileValue.bound === '>') {
+      return `Прогнозируемый рост ${fmt(heightValue)} см: выше 95-го перцентиля используемой референсной выборки.`;
+    }
 
-    growthHormoneAdvice.hidden = false;
+    return `Прогнозируемый рост ${fmt(heightValue)} см — ${percentileLabel} перцентиль. 
+    В США или в России ~${adultsAbove}% взрослых ${adults} выше этого роста, а ~${adultsBelow}% — ниже.`;
+  };
 
-    growthHormoneAdvice.classList.add(
-      'prediction__advice_warning',
-      'prediction__comparison-result'
-    );
+  if (isRange) {
+    const minPercentile = percentile(adultRange.min, gender);
+    const maxPercentile = percentile(adultRange.max, gender);
 
-    
-    growthHormoneAdvice.innerHTML =
-      `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
+    percentileText.textContent =
+  `${adultsPercentileText(adultRange.min, minPercentile)}\n\n${adultsPercentileText(adultRange.max, maxPercentile)}`;
 
-      Сайт рекомендует:
-      
-      назначение Гормона Роста (у эндокринолога).
+  
+  } else if (perc.bound === '<') {
+    percentileText.textContent =
+      `Прогноз ниже 5-го перцентиля используемой референсной выборки.`;
 
-      И / ИЛИ
+  } else if (perc.bound === '>') {
+    percentileText.textContent =
+      `Прогноз выше 95-го перцентиля используемой референсной выборки.`;
 
-      Вы можете увеличить выработку естественного Гормона Роста с помощью аргинина 
-      (так сказал профессор В. А. Дадали:
+  } else {
+    const low = Math.max(0, Math.min(100, perc.value));
+    const adultsAbove = Math.round(100 - low);
+    const adultsBelow = Math.round(low);
 
-      Видео 1:    <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/WtgT5QQbVIM">https://www.youtube.com/shorts/WtgT5QQbVIM</a>
-      
-      Видео 2:    <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/K2xThz5-5cM"> https://www.youtube.com/shorts/K2xThz5-5cM</a>   
-
-       )`;
-
+    percentileText.textContent =
+      `Перцентиль прогнозируемого взрослого роста: ${pText} (${fmt(adult)} см). 
+      В США или в России ~${adultsAbove}% взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${adultsBelow}% — ниже.`;
   }
 
+  growthHormoneAdvice.hidden = false;
+
+  growthHormoneAdvice.classList.add(
+    'prediction__advice_warning',
+    'prediction__comparison-result'
+  );
+
+  growthHormoneAdvice.innerHTML =
+    `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
+
+    Сайт рекомендует:
+
+    назначение Гормона Роста (у эндокринолога).
+
+    И / ИЛИ
+
+    Вы можете увеличить выработку естественного Гормона Роста с помощью аргинина
+    (так сказал профессор В. А. Дадали:
+
+    Видео 1: <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/WtgT5QQbVIM">https://www.youtube.com/shorts/WtgT5QQbVIM</a>
+
+    Видео 2: <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/K2xThz5-5cM">https://www.youtube.com/shorts/K2xThz5-5cM</a>
+
+    )`;
+
+}
 
   // ================================================================
   // СЛУЧАЙ 2:
