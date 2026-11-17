@@ -531,8 +531,8 @@ percentileMetric.textContent = isRange
   : pText;
 
 document.getElementById('rPercentile').innerHTML = isRange
-  ? `<strong class="prediction__highlight">${pTextRange} перцентиль</strong>`
-  : `<strong class="prediction__highlight">${pText} перцентиль</strong>`;
+  ? `<strong class="prediction__highlight">${pTextRange} </strong>`
+  : `<strong class="prediction__highlight">${pText} </strong>`;
 
   
   // Блок рекомендации всегда остаётся видимым.
@@ -622,13 +622,11 @@ document.getElementById('rPercentile').innerHTML = isRange
     И / ИЛИ
 
     Вы можете увеличить выработку естественного Гормона Роста с помощью аргинина
-    (так сказал профессор В. А. Дадали:
+    (рекомендация профессора В. А. Дадали):
 
     Видео 1: <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/WtgT5QQbVIM">https://www.youtube.com/shorts/WtgT5QQbVIM</a>
 
-    Видео 2: <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/K2xThz5-5cM">https://www.youtube.com/shorts/K2xThz5-5cM</a>
-
-    )`;
+    Видео 2: <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/shorts/K2xThz5-5cM">https://www.youtube.com/shorts/K2xThz5-5cM</a>`;
 
 }
 

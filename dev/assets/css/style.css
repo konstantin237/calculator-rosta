@@ -333,6 +333,11 @@ body {
 
   white-space: pre-line;
 }
+
+  .prediction__methodic-sources{
+    white-space: normal;
+  }
+
 .prediction__advice {
   margin-top: 10px;
   padding: 12px 14px;
