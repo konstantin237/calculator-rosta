@@ -111,7 +111,7 @@ function renderResearchTable() {
       'research-tables__cell research-tables__cell_range';
 
     cell.textContent = values.length
-      ? `${fmt(Math.min(...values))}–${fmt(Math.max(...values))}%`
+      ? `${fmt(Math.min(...values))} – ${fmt(Math.max(...values))}%`
       : '—';
 
     ageCell.after(cell);
@@ -148,7 +148,7 @@ function highlightResearchColumn(method) {
   });
 }
 
-// CDC/NHANES US adults 20+ (2021–2023): percentile -> cm.
+// CDC/NHANES US adults 20+ (2021 – 2023): percentile -> cm.
 const ADULT_REF = {
   male: [
     [5,162.2],[10,165.2],[15,167.5],[25,170.0],
@@ -443,11 +443,11 @@ const pTextRange = isRange
 
     
 document.getElementById('pctReached').textContent = isRange
-  ? `${fmt(rangeValues.min)}–${fmt(rangeValues.max)}%`
+  ? `${fmt(rangeValues.min)} – ${fmt(rangeValues.max)}%`
   : `${fmt(reached)}%`;
 
 document.getElementById('adultHeight').textContent = isRange
-  ? `${fmt(adultRange.min)}–${fmt(adultRange.max)} см`
+  ? `${fmt(adultRange.min)} – ${fmt(adultRange.max)} см`
   : `${fmt(adult)} см`;
   
 
@@ -463,15 +463,15 @@ document.getElementById('adultHeight').textContent = isRange
 
 
 document.getElementById('rReached').textContent = isRange
-  ? `${fmt(rangeValues.min)}–${fmt(rangeValues.max)}%`
+  ? `${fmt(rangeValues.min)} – ${fmt(rangeValues.max)}%`
   : `${fmt(reached)}%`;
 
 document.getElementById('rRemaining').innerHTML = isRange
-  ? `<strong class="prediction__highlight">${fmt(remainingRange.min)}–${fmt(remainingRange.max)} см / ${fmt(remainingRange.pctMin)}–${fmt(remainingRange.pctMax)}%</strong>`
+  ? `<strong class="prediction__highlight">${fmt(remainingRange.min)} – ${fmt(remainingRange.max)} см / ${fmt(remainingRange.pctMin)} – ${fmt(remainingRange.pctMax)}%</strong>`
   : `<strong class="prediction__highlight">${fmt(Math.max(0, remainingCm))} см / ${fmt(remainingPct)}%</strong>`;
 
 document.getElementById('rAdult').innerHTML = isRange
-  ? `<strong class="prediction__highlight">${fmt(adultRange.min)}–${fmt(adultRange.max)} см</strong>`
+  ? `<strong class="prediction__highlight">${fmt(adultRange.min)} – ${fmt(adultRange.max)} см</strong>`
   : `<strong class="prediction__highlight">${fmt(adult)} см</strong>`;
 
 
@@ -584,7 +584,7 @@ document.getElementById('rPercentile').innerHTML = isRange
     const maxPercentile = percentile(adultRange.max, gender);
 
     percentileText.textContent =
-  `${adultsPercentileText(adultRange.min, minPercentile)}\n\n${adultsPercentileText(adultRange.max, maxPercentile)}`;
+  `${adultsPercentileText(adultRange.min, minPercentile)} \n\n ${adultsPercentileText(adultRange.max, maxPercentile)}`;
 
   
   } else if (perc.bound === '<') {
