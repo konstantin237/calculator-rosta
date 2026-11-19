@@ -537,7 +537,7 @@ document.getElementById('rPercentile').innerHTML = isRange
   
   // Блок рекомендации всегда остаётся видимым.
 
-  growthHormoneAdvice.hidden = false;
+  growthHormoneAdvice.hidden = true;
   growthHormoneAdvice.textContent = '';
 
   growthHormoneAdvice.classList.remove(
@@ -634,7 +634,7 @@ document.getElementById('rPercentile').innerHTML = isRange
     percentileText.textContent =
       `Прогнозируемый взрослый рост на ${fmt(deficitFromAverage)} см ниже среднего (${fmt(avg)} см), что не критично.`;
 
-    growthHormoneAdvice.hidden = false;
+    growthHormoneAdvice.hidden = true;
     growthHormoneAdvice.textContent = '';
 
   }
@@ -653,7 +653,7 @@ document.getElementById('rPercentile').innerHTML = isRange
     percentileText.textContent =
       `Прогнозируемый взрослый рост (${fmt(adult)} см) не ниже среднего (${fmt(avg)} см).`;
 
-    growthHormoneAdvice.hidden = false;
+    growthHormoneAdvice.hidden = true;
     growthHormoneAdvice.textContent = '';
 
   }
