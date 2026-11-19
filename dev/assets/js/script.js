@@ -416,10 +416,10 @@ const pTextRange = isRange
   const deficitFromAverage = avg - adult;
 
   const needsMinorBelowAverageInfo =
-    deficitFromAverage > 0 && deficitFromAverage < 2;
+    deficitFromAverage > 0 && deficitFromAverage < 4;
 
   const needsGrowthHormoneDiscussion =
-    deficitFromAverage >= 2;
+    deficitFromAverage >= 4;
 
 
   // ================================================================
