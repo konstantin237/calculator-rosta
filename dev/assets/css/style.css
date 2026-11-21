@@ -89,7 +89,7 @@ body {
 .prediction__layout {
   display: grid;
   grid-template-columns: 465px 900px;
-  /*grid-template-columns: 465px minmax(0, 900px);*/
+  /* grid-template-columns: 465px minmax(0, 900px);*/
   align-items: start;
   gap: 24px;
   /*@media (max-width: 1100px) {
@@ -264,10 +264,9 @@ body {
   padding: 15px;
   border-radius: 14px;
   background: #f0f3f8 !important;
-
-      display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .prediction__metric-label {
   margin-bottom: 7px;
@@ -330,14 +329,11 @@ body {
   color: #667085 !important;
   font-size: 12px;
   line-height: 1.55;
-
   white-space: pre-line;
 }
-
-  .prediction__methodic-sources{
-    white-space: normal;
-  }
-
+.prediction__methodic-sources {
+  white-space: normal;
+}
 .prediction__advice {
   margin-top: 10px;
   padding: 12px 14px;
@@ -718,7 +714,6 @@ body {
   padding: 30px;
   background: #fff;
   border-radius: 12px;
-
   position: relative;
   width: 1140px;
   max-width: none;
@@ -738,7 +733,6 @@ body {
 }
 .research-tables__section {
   margin-top: 36px;
-
   position: relative;
   width: 100%;
 }
@@ -864,4 +858,56 @@ body {
   color: #2148c7 !important;
   font-weight: 800;
   box-shadow: inset 0 0 0 1px rgba(49, 94, 251, 0.18);
+}
+.research-tables__cell_range {
+  background: #f0f4ff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Language switch */
+.prediction__header {
+  position: relative;
+  padding-right: 110px;
+}
+
+.language-switch {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid #dce2eb;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.language-switch__button {
+  min-width: 38px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #667085;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.language-switch__button.is-active {
+  background: #315efb;
+  color: #fff;
+}
+
+@media (max-width: 560px) {
+  .prediction__header {
+    padding-right: 0;
+    padding-top: 42px;
+  }
+  .language-switch {
+    top: 0;
+    right: 0;
+  }
 }

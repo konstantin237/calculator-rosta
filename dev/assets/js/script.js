@@ -1,3 +1,81 @@
+let currentLanguage = 'ru';
+
+const I18N = {
+  'Определитель роста':'Height Predictor','Калькулятор роста':'Height Calculator',
+  'Прогноз взрослого роста ребёнка':'Child Adult Height Prediction',
+  'Выберите методику расчёта, затем введите пол, возраст и текущий рост — сайт восстановит предполагаемый взрослый рост.':'Select a calculation method, then enter sex, age, and current height to estimate adult height.',
+  'Пол':'Sex','Мальчик':'Boy','Девочка':'Girl','Возраст, лет, месяцев':'Age (years and months)',
+  '(введите сколько ЛЕТ и МЕСЯЦЕВ)':'(enter YEARS and MONTHS)','Лучше укажите костный возраст. Его можно определить по рентгену кисти у эндокринолога.':'Bone age is preferable. It can be determined from a hand X-ray by an endocrinologist.',
+  'Методика расчёта':'Calculation method','Разброс методик':'Range across methods','Наименьшее значение':'Minimum value','Наибольшее значение':'Maximum value','Среднее арифметическое':'Arithmetic mean',
+  'Для выбранной методики нет данных для указанного возраста.':'No data is available for the selected method and age.',
+  'Текущий рост, см':'Current height, cm','Введите рост от 80 до 230 см.':'Enter a height between 80 and 230 cm.',
+  'Средний рост мужчин, см':'Average male height, cm','Средний рост женщин, см':'Average female height, cm','Средний рост':'Average height','(В США  или в России)':'(in the US or Russia)',
+  '178 см — мужчины':'178 cm — men','165 см — женщины':'165 cm — women',
+  'После нажатия «Рассчитать» сайт использует новые значения.':'After clicking “Calculate”, the site will use the updated values.','Рассчитать':'Calculate','Результат':'Result',
+  'Уже достигнуто':'Already reached','Прогноз взрослого роста':'Predicted adult height','Перцентиль взрослого роста':'Adult height percentile','(если ребёнок отстаёт по росту)':'(if the child is shorter than average)',
+  'Пол':'Sex','Возраст':'Age','Рост':'Height','Осталось вырасти':'Growth remaining','Что означает перцентиль':'What the percentile means',
+  'Источники методики:':'Methodology sources:','таблица IV':'Table IV','статьи  Flores-Olivares и соавт.':'Flores-Olivares et al. article',
+  '(2019), показатель TW3 2012.':'(2019), TW3 2012 data.','В таблице написано - в каком возрасте - какой процент - от будущего взрослого роста - уже достигнут.':'The table shows what percentage of final adult height has been reached at each age.',
+  'Перцентиль взрослого роста рассчитывается отдельно по опубликованным взрослым данным CDC/NHANES США 2021–2023':'Adult height percentiles are calculated separately using published US CDC/NHANES adult data from 2021–2023',
+  'и линейно интерполируется между указанными в источнике перцентилями.':'and linearly interpolated between the percentiles listed in the source.',
+  'Научные исследования и исходные данные':'Scientific studies and source data','Полная сравнительная таблица':'Full comparison table',
+  'Сравнение четырёх исходных методик и рассчитанных по ним статистических показателей.':'Comparison of the four original methods and the statistical measures calculated from them.',
+  'Таблица IV. Процент взрослого роста в зависимости от возраста и пола':'Table IV. Percentage of adult height by age and sex',
+  'Наибольшее':'Maximum','Наименьшее':'Minimum','Среднее':'Mean','арифметическое':'arithmetic','Мужской':'Male','Женский':'Female',
+  'Мужской пол':'Male','Женский пол':'Female','лет':'years','Источники методики:':'Methodology sources:',
+  'BP 1952 — Bayley & Pinneau':'BP 1952 — Bayley & Pinneau','Процент взрослого роста по методике BP 1952':'Adult height percentage according to the BP 1952 method',
+  'Источник данных: продольное исследование Berkeley Growth Study children.':'Data source: Berkeley Growth Study longitudinal study of children.',
+  'TW 1965 — Tanner et al.':'TW 1965 — Tanner et al.','Процент взрослого роста по методике TW 1965':'Adult height percentage according to the TW 1965 method',
+  'Источник данных: продольное исследование Child Study Centre in London.':'Data source: Child Study Centre in London longitudinal study.',
+  'RWT 1983 — Roche et al.':'RWT 1983 — Roche et al.','Процент взрослого роста по методике RWT 1983':'Adult height percentage according to the RWT 1983 method',
+  'Оценка методом RWT (Wainer et al., 1978).':'Estimate using the RWT method (Wainer et al., 1978).',
+  'TW3 2012 — настоящее исследование':'TW3 2012 — present study','Процент взрослого роста по методике TW3 2012':'Adult height percentage according to the TW3 2012 method',
+  'Результаты настоящего исследования, полученные методом TW3':'Results of the present study using the TW3 method',
+  'ПОЯСНЕНИЯ И ИСТОЧНИК':'NOTES AND SOURCE','Расшифровка методик':'Method descriptions','Статистические показатели':'Statistical measures',
+  'Мужской пол: P = 0,993.':'Male: P = 0.993.','Женский пол: P = 0,581.':'Female: P = 0.581.',
+  'Примечание':'Note','Прочерк (—) в оригинальной таблице означает отсутствие значения.':'A dash (—) in the original table indicates that no value was available.',
+  'Такие значения не восстанавливались и не заменялись предположительными числами.':'These values were not reconstructed or replaced with estimated numbers.',
+  'Источник':'Source','7 лет':'7 years','8 лет':'8 years','9 лет':'9 years','10 лет':'10 years','11 лет':'11 years','12 лет':'12 years','13 лет':'13 years','14 лет':'14 years','15 лет':'15 years','16 лет':'16 years'
+};
+
+function t(text) {
+  return currentLanguage === 'en' ? (I18N[text] || text) : text;
+}
+
+function applyLanguage(language) {
+  currentLanguage = language === 'en' ? 'en' : 'ru';
+  document.documentElement.lang = currentLanguage;
+  document.title = t('Определитель роста');
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let node;
+  while ((node = walker.nextNode())) {
+    const original = node.__ruText ?? node.nodeValue;
+    if (node.__ruText === undefined) node.__ruText = original;
+    const trimmed = original.trim();
+    if (!trimmed) continue;
+    const translated = t(trimmed);
+    if (translated !== trimmed) {
+      const leading = original.match(/^\s*/)?.[0] || '';
+      const trailing = original.match(/\s*$/)?.[0] || '';
+      node.nodeValue = leading + translated + trailing;
+    } else if (currentLanguage === 'ru') {
+      node.nodeValue = original;
+    }
+  }
+  document.querySelectorAll('.language-switch__button').forEach(button => {
+    const active = button.dataset.lang === currentLanguage;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+  if (typeof calculateGrowth === 'function') calculateGrowth();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.language-switch__button').forEach(button => {
+    button.addEventListener('click', () => applyLanguage(button.dataset.lang));
+  });
+});
+
 let AHP;
 
 const AHP_DATA = {
@@ -213,7 +291,8 @@ document.getElementById('calc').addEventListener('click', calculateGrowth);
 
 
 function fmt(n, digits = 1) {
-  return n.toFixed(digits).replace('.', ',');
+  const value = n.toFixed(digits);
+  return currentLanguage === 'en' ? value : value.replace('.', ',');
 }
 
 
@@ -371,26 +450,27 @@ const remainingRange = isRange
 
 
 
-  const pText =
-    perc.bound === '<'
-      ? `<${perc.value}-го`
-      : perc.bound === '>'
-        ? `>${perc.value}-го`
-        : `≈${Math.round(perc.value)}-й `;
+  const ordinal = value => {
+    const n = Math.round(value);
+    const mod100 = n % 100;
+    const suffix = mod100 >= 11 && mod100 <= 13 ? 'th' : ({1:'st', 2:'nd', 3:'rd'}[n % 10] || 'th');
+    return `${n}${suffix}`;
+  };
 
-const formatPercentile = value =>
-  value.bound === '<'
-    ? `<${value.value}-го`
-    : value.bound === '>'
-      ? `>${value.value}-го`
-      : `≈${Math.round(value.value)}-й `;
+  const pText = currentLanguage === 'en'
+    ? (perc.bound === '<' ? '<5th' : perc.bound === '>' ? '>95th' : `≈${ordinal(perc.value)}`)
+    : (perc.bound === '<' ? `<${perc.value}-го` : perc.bound === '>' ? `>${perc.value}-го` : `≈${Math.round(perc.value)}-й `);
+
+const formatPercentile = value => currentLanguage === 'en'
+  ? (value.bound === '<' ? '<5th' : value.bound === '>' ? '>95th' : `≈${ordinal(value.value)}`)
+  : (value.bound === '<' ? `<${value.value}-го` : value.bound === '>' ? `>${value.value}-го` : `≈${Math.round(value.value)}-й `);
 
 const pTextRange = isRange
   ? `${formatPercentile(percentile(adultRange.min, gender))}   –   ${formatPercentile(percentile(adultRange.max, gender))}`
   : pText;
 
 
-  const genderName = gender === 'male' ? 'Мальчик' : 'Девочка';
+  const genderName = t(gender === 'male' ? 'Мальчик' : 'Девочка');
 
   // Средний рост, введённый пользователем, используется
   // только для расчёта текущего результата.
@@ -435,11 +515,11 @@ const pTextRange = isRange
   // значений avgMale и avgFemale.
   // ================================================================
 
-  document.getElementById('methodBadge').textContent = METHOD_LABELS[selectedMethod];
+  document.getElementById('methodBadge').textContent = t(METHOD_LABELS[selectedMethod]);
   highlightResearchColumn(selectedMethod);
 
   document.getElementById('summary').textContent =
-    `${genderName}, ${fmt(age, age % 1 ? 1 : 0)}лет, ${fmt(height)} см`;
+    `${genderName}, ${fmt(age, age % 1 ? 1 : 0)} ${t('лет')}, ${fmt(height)} ${currentLanguage === 'en' ? 'cm' : 'см'}`;
 
     
 document.getElementById('pctReached').textContent = isRange
@@ -447,18 +527,18 @@ document.getElementById('pctReached').textContent = isRange
   : `${fmt(reached)}%`;
 
 document.getElementById('adultHeight').textContent = isRange
-  ? `${fmt(adultRange.min)} – ${fmt(adultRange.max)} см`
-  : `${fmt(adult)} см`;
+  ? `${fmt(adultRange.min)} – ${fmt(adultRange.max)} ${currentLanguage === 'en' ? 'cm' : 'см'}`
+  : `${fmt(adult)} ${currentLanguage === 'en' ? 'cm' : 'см'}`;
   
 
   document.getElementById('rgender').textContent =
     genderName;
 
   document.getElementById('rAge').textContent =
-    `${fmt(age, age % 1 ? 1 : 0)} лет`;
+    `${fmt(age, age % 1 ? 1 : 0)} ${t('лет')}`;
 
   document.getElementById('rHeight').textContent =
-    `${fmt(height)} см`;
+    `${fmt(height)} ${currentLanguage === 'en' ? 'cm' : 'см'}`;
 
 
 
@@ -467,12 +547,12 @@ document.getElementById('rReached').textContent = isRange
   : `${fmt(reached)}%`;
 
 document.getElementById('rRemaining').innerHTML = isRange
-  ? `<strong class="prediction__highlight">${fmt(remainingRange.min)} – ${fmt(remainingRange.max)} см / ${fmt(remainingRange.pctMin)} – ${fmt(remainingRange.pctMax)}%</strong>`
-  : `<strong class="prediction__highlight">${fmt(Math.max(0, remainingCm))} см / ${fmt(remainingPct)}%</strong>`;
+  ? `<strong class="prediction__highlight">${fmt(remainingRange.min)} – ${fmt(remainingRange.max)} ${currentLanguage === 'en' ? 'cm' : 'см'} / ${fmt(remainingRange.pctMin)} – ${fmt(remainingRange.pctMax)}%</strong>`
+  : `<strong class="prediction__highlight">${fmt(Math.max(0, remainingCm))} ${currentLanguage === 'en' ? 'cm' : 'см'} / ${fmt(remainingPct)}%</strong>`;
 
 document.getElementById('rAdult').innerHTML = isRange
-  ? `<strong class="prediction__highlight">${fmt(adultRange.min)} – ${fmt(adultRange.max)} см</strong>`
-  : `<strong class="prediction__highlight">${fmt(adult)} см</strong>`;
+  ? `<strong class="prediction__highlight">${fmt(adultRange.min)} – ${fmt(adultRange.max)} ${currentLanguage === 'en' ? 'cm' : 'см'}</strong>`
+  : `<strong class="prediction__highlight">${fmt(adult)} ${currentLanguage === 'en' ? 'cm' : 'см'}</strong>`;
 
 
 
@@ -565,18 +645,17 @@ document.getElementById('rPercentile').innerHTML = isRange
     const adultsAbove = Math.round(100 - low);
     const adultsBelow = Math.round(low);
     const percentileLabel = formatPercentile(percentileValue);
-    const adults = gender === 'male' ? 'мужчин' : 'женщин';
+    const adults = currentLanguage === 'en' ? (gender === 'male' ? 'men' : 'women') : (gender === 'male' ? 'мужчин' : 'женщин');
 
     if (percentileValue.bound === '<') {
-      return `Прогнозируемый рост ${fmt(heightValue)} см: ниже 5-го перцентиля используемой референсной выборки.`;
+      return currentLanguage === 'en' ? `Predicted height of ${fmt(heightValue)} cm: below the 5th percentile of the reference sample.` : `Прогнозируемый рост ${fmt(heightValue)} см: ниже 5-го перцентиля используемой референсной выборки.`;
     }
 
     if (percentileValue.bound === '>') {
-      return `Прогнозируемый рост ${fmt(heightValue)} см: выше 95-го перцентиля используемой референсной выборки.`;
+      return currentLanguage === 'en' ? `Predicted height of ${fmt(heightValue)} cm: above the 95th percentile of the reference sample.` : `Прогнозируемый рост ${fmt(heightValue)} см: выше 95-го перцентиля используемой референсной выборки.`;
     }
 
-    return `Прогнозируемый рост ${fmt(heightValue)} см — ${percentileLabel} перцентиль. 
-    В США или в России ~${adultsAbove}% взрослых ${adults} выше этого роста, а ~${adultsBelow}% — ниже.`;
+    return currentLanguage === 'en' ? `Predicted height of ${fmt(heightValue)} cm is at the ${percentileLabel} percentile. Approximately ${adultsAbove}% of adults ${adults} in the US or Russia are taller, and ${adultsBelow}% are shorter.` : `Прогнозируемый рост ${fmt(heightValue)} см — ${percentileLabel} перцентиль. В США или в России ~${adultsAbove}% взрослых ${adults} выше этого роста, а ~${adultsBelow}% — ниже.`;
   };
 
   if (isRange) {
@@ -589,11 +668,11 @@ document.getElementById('rPercentile').innerHTML = isRange
   
   } else if (perc.bound === '<') {
     percentileText.textContent =
-      `Прогноз ниже 5-го перцентиля используемой референсной выборки.`;
+      (currentLanguage === 'en' ? 'The prediction is below the 5th percentile of the reference sample.' : 'Прогноз ниже 5-го перцентиля используемой референсной выборки.');
 
   } else if (perc.bound === '>') {
     percentileText.textContent =
-      `Прогноз выше 95-го перцентиля используемой референсной выборки.`;
+      (currentLanguage === 'en' ? 'The prediction is above the 95th percentile of the reference sample.' : 'Прогноз выше 95-го перцентиля используемой референсной выборки.');
 
   } else {
     const low = Math.max(0, Math.min(100, perc.value));
@@ -601,8 +680,7 @@ document.getElementById('rPercentile').innerHTML = isRange
     const adultsBelow = Math.round(low);
 
     percentileText.textContent =
-      `Перцентиль прогнозируемого взрослого роста: ${pText} (${fmt(adult)} см). 
-      В США или в России ~${adultsAbove}% взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${adultsBelow}% — ниже.`;
+      currentLanguage === 'en' ? `Predicted adult height percentile: ${pText} (${fmt(adult)} cm). Approximately ${adultsAbove}% of adults ${gender === 'male' ? 'men' : 'women'} in the US or Russia are taller, and ${adultsBelow}% are shorter.` : `Перцентиль прогнозируемого взрослого роста: ${pText} (${fmt(adult)} см). В США или в России ~${adultsAbove}% взрослых ${gender === 'male' ? 'мужчин' : 'женщин'} выше этого роста, а ~${adultsBelow}% — ниже.`;
   }
 
   growthHormoneAdvice.hidden = false;
@@ -613,11 +691,15 @@ document.getElementById('rPercentile').innerHTML = isRange
   );
 
   growthHormoneAdvice.innerHTML =
-    `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
+    currentLanguage === 'en' ? `Predicted adult height (${fmt(adult)} cm) is ${fmt(deficitFromAverage)} cm below the average height for ${gender === 'male' ? 'men' : 'women'} (${fmt(avg)} cm).
 
-    Сайт рекомендует:
+The website recommends:
 
-    назначение Гормона Роста (у эндокринолога).`;
+Discussing growth hormone treatment with an endocrinologist.` : `Прогноз взрослого роста (${fmt(adult)} см) на ${fmt(deficitFromAverage)} см ниже среднего роста ${gender === 'male' ? 'мужчин' : 'женщин'} (${fmt(avg)} см).
+
+Сайт рекомендует:
+
+назначение Гормона Роста (у эндокринолога).`;
 
 }
 
@@ -632,7 +714,7 @@ document.getElementById('rPercentile').innerHTML = isRange
   else if (needsMinorBelowAverageInfo) {
 
     percentileText.textContent =
-      `Прогнозируемый взрослый рост на ${fmt(deficitFromAverage)} см ниже среднего (${fmt(avg)} см), что не критично.`;
+      currentLanguage === 'en' ? `Predicted adult height is ${fmt(deficitFromAverage)} cm below average (${fmt(avg)} cm), which is not critical.` : `Прогнозируемый взрослый рост на ${fmt(deficitFromAverage)} см ниже среднего (${fmt(avg)} см), что не критично.`;
 
     growthHormoneAdvice.hidden = true;
     growthHormoneAdvice.textContent = '';
@@ -651,7 +733,7 @@ document.getElementById('rPercentile').innerHTML = isRange
   else {
 
     percentileText.textContent =
-      `Прогнозируемый взрослый рост (${fmt(adult)} см) не ниже среднего (${fmt(avg)} см).`;
+      currentLanguage === 'en' ? `Predicted adult height (${fmt(adult)} cm) is at or above average (${fmt(avg)} cm).` : `Прогнозируемый взрослый рост (${fmt(adult)} см) не ниже среднего (${fmt(avg)} см).`;
 
     growthHormoneAdvice.hidden = true;
     growthHormoneAdvice.textContent = '';
